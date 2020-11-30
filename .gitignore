@@ -27,5 +27,6 @@ yarn-error.log*
 .vs
 .idea
 .env
+.vscode
 
 .eslintcache
