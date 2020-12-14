@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import { AppBar, IconButton, Toolbar, Typography, Drawer, List, Divider, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
 import { Menu, ChevronLeft } from "@material-ui/icons"
 import { DashboardDrawerList } from "../constants/RoutesConstants";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { Dashboard } from "../components/Dashboard";
 
 export const DashboardRoutes = () => {
     const [open, setOpen] = useState<boolean>(false);
@@ -15,7 +17,7 @@ export const DashboardRoutes = () => {
     };
 
     return (
-        <>
+        <BrowserRouter>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerOpen} >
@@ -47,6 +49,12 @@ export const DashboardRoutes = () => {
                 </List>
                 <Divider />
             </Drawer>
-        </>
+
+            <Switch>
+                <Route path='/dashboard'>
+                    <Dashboard />
+                </Route>
+            </Switch>
+        </BrowserRouter>
     )
 }
