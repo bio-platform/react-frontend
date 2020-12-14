@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core"
 import { Menu } from "@material-ui/icons"
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Dashboard } from "../components/Dashboard";
 import { UniversalDrawer } from "../components/UniversalDrawer";
 import { DashboardDrawerList } from "../constants/RoutesConstants";
@@ -18,7 +18,7 @@ export const DashboardRoutes = () => {
     };
 
     return (
-        <BrowserRouter>
+        <Router>
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleDrawerOpen} >
@@ -35,6 +35,6 @@ export const DashboardRoutes = () => {
                     <Dashboard />
                 </Route>
             </Switch>
-        </BrowserRouter>
+        </Router>
     )
 }
