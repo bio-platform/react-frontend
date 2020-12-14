@@ -1,12 +1,12 @@
 import React from 'react';
-import { DashboardRoutes } from './routes/DashboardRoutes';
 import { CssBaseline } from '@material-ui/core';
+import { ApplicationRoutes } from './routes/ApplicationRoutes';
 
 function App() {
     return (
         <>
             <CssBaseline />
-            <DashboardRoutes />
+            <ApplicationRoutes />
         </>
     );
 }
