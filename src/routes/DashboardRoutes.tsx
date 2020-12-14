@@ -1,6 +1,7 @@
 import React, { useState } from "react"
-import { AppBar, IconButton, Toolbar, Typography, Drawer, List, Divider, ListItem, ListItemIcon, ListItemText, Grid } from "@material-ui/core"
-import { Menu, ChevronLeft, Inbox, Mail } from "@material-ui/icons"
+import { AppBar, IconButton, Toolbar, Typography, Drawer, List, Divider, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
+import { Menu, ChevronLeft } from "@material-ui/icons"
+import { DashboardDrawerList } from "../constants/RoutesConstants";
 
 export const DashboardRoutes = () => {
     const [open, setOpen] = useState<boolean>(false);
@@ -37,22 +38,14 @@ export const DashboardRoutes = () => {
                 </div>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                    {DashboardDrawerList.map((item, index) => (
+                        <ListItem button key={item[0].toString()}>
+                            <ListItemIcon>{item[1]}</ListItemIcon>
+                            <ListItemText primary={item[0]} />
                         </ListItem>
                     ))}
                 </List>
                 <Divider />
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <Inbox /> : <Mail />}</ListItemIcon>
-                            <ListItemText primary={text} />
-                        </ListItem>
-                    ))}
-                </List>
             </Drawer>
         </>
     )
