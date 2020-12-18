@@ -11,40 +11,49 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'center',
             color: theme.palette.text.secondary,
         },
+        paperHeader: {
+            marginTop: -35,
+            padding: theme.spacing(2),
+            backgroundColor: theme.palette.info.main,
+            color:  theme.palette.primary.contrastText,
+            borderRadius: 4,
+        }
     }),
 );
 
 export const Dashboard = () => {
-    const classes = useStyles();
+    const styles = useStyles();
 
     //todo add spacing
 
     return (
-        <div className={classes.root} >
+        <div className={styles.root} >
             <Container maxWidth='xl'>
                 <Typography variant='h1'> Dashboard </Typography>
                 <Typography variant='h3'> Limits </Typography>
-                <Grid container spacing={6}>
+                <Grid container spacing={5}>
+                    <Grid sm={6} md={4} lg={3}>
+                        <Paper className={styles.paper}>
+                            <div className={styles.paperHeader}>
+                                <p >todo chart</p>
+                            </div>
+                            <Typography variant='h6'>Instances x/y</Typography>
+                        </Paper>
+                    </Grid>
                     <Grid sm={6} md={4} lg={3} >
-                        <Paper className={classes.paper}>
+                        <Paper className={styles.paper}>
                             <p>todo chart</p>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
                     </Grid>
                     <Grid sm={6} md={4} lg={3} >
-                        <Paper className={classes.paper}>
+                        <Paper className={styles.paper}>
                             <p>todo chart</p>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
                     </Grid>
                     <Grid sm={6} md={4} lg={3} >
-                        <Paper className={classes.paper}>
-                            <p>todo chart</p>
-                            <Typography variant='h6'>Instances x/y</Typography>
-                        </Paper>
-                    </Grid>
-                    <Grid sm={6} md={4} lg={3} >
-                        <Paper className={classes.paper}>
+                        <Paper className={styles.paper}>
                             <p>todo chart</p>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
