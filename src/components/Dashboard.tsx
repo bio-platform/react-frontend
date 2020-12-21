@@ -1,5 +1,7 @@
 import React from "react"
 import { Paper, Grid, Container, Typography, makeStyles, createStyles, Theme } from "@material-ui/core"
+import { VictoryPie } from "victory";
+import { useTheme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -15,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: -35,
             padding: theme.spacing(2),
             backgroundColor: theme.palette.info.main,
-            color:  theme.palette.primary.contrastText,
+            color: theme.palette.primary.contrastText,
             borderRadius: 4,
         }
     }),
@@ -23,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const Dashboard = () => {
     const styles = useStyles();
+    const theme = useTheme();
 
     //todo add spacing
 
@@ -35,7 +38,9 @@ export const Dashboard = () => {
                     <Grid sm={6} md={4} lg={3} item={true}>
                         <Paper className={styles.paper}>
                             <div className={styles.paperHeader}>
-                                <p>todo chart</p>
+                                <VictoryPie
+                                    colorScale={[theme.palette.error.main, theme.palette.primary.contrastText]}
+                                    data={[{ x: "Used", y: 60 }, { x: "Available", y: 40 }]} />
                             </div>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
