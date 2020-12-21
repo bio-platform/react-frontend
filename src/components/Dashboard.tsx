@@ -31,28 +31,28 @@ export const Dashboard = () => {
             <Container maxWidth='xl'>
                 <Typography variant='h1'> Dashboard </Typography>
                 <Typography variant='h3'> Limits </Typography>
-                <Grid container spacing={5}>
-                    <Grid sm={6} md={4} lg={3}>
+                <Grid container spacing={3}>
+                    <Grid sm={6} md={4} lg={3} item={true}>
                         <Paper className={styles.paper}>
                             <div className={styles.paperHeader}>
-                                <p >todo chart</p>
+                                <p>todo chart</p>
                             </div>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
                     </Grid>
-                    <Grid sm={6} md={4} lg={3} >
+                    <Grid sm={6} md={4} lg={3} item={true}>
                         <Paper className={styles.paper}>
                             <p>todo chart</p>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
                     </Grid>
-                    <Grid sm={6} md={4} lg={3} >
+                    <Grid sm={6} md={4} lg={3} item={true}>
                         <Paper className={styles.paper}>
                             <p>todo chart</p>
                             <Typography variant='h6'>Instances x/y</Typography>
                         </Paper>
                     </Grid>
-                    <Grid sm={6} md={4} lg={3} >
+                    <Grid sm={6} md={4} lg={3} item={true}>
                         <Paper className={styles.paper}>
                             <p>todo chart</p>
                             <Typography variant='h6'>Instances x/y</Typography>
