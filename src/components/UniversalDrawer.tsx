@@ -1,6 +1,6 @@
 import React from "react"
 import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
-import { ChevronLeft } from "@material-ui/icons"
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 type UniversalDrawerProps = {
     handleDrawerClose: () => void,
@@ -16,7 +16,7 @@ export const UniversalDrawer = (props: UniversalDrawerProps) => {
     >
         <div>
             <IconButton onClick={props.handleDrawerClose}>
-                <ChevronLeft />
+                <ChevronLeftIcon />
             </IconButton>
         </div>
         <Divider />

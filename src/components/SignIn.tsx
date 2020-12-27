@@ -1,6 +1,6 @@
 import React from "react"
 import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
-import { LockOutlined } from "@material-ui/icons";
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -25,7 +25,7 @@ export const SignIn = () => {
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlined />
+                    <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h3" variant="h3">
                     Sign in

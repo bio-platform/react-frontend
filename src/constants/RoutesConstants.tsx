@@ -1,5 +1,4 @@
 import React from "react";
-import { Dashboard } from "@material-ui/icons";
+import DashboardIcon from '@material-ui/icons/Dashboard';
 
-// these are icons
-export const DashboardDrawerList = [['Dashboard', <Dashboard />], ['Instances', <Dashboard />], ['Volumes', <Dashboard />]];
+export const DashboardDrawerList = [['Dashboard', <DashboardIcon />], ['Instances', <DashboardIcon />], ['Volumes', <DashboardIcon />]];

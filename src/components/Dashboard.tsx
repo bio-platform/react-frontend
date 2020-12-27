@@ -33,7 +33,8 @@ export const Dashboard = () => {
     return (
         <div className={styles.root} >
             <Container maxWidth='xl'>
-                <Typography variant='h1'> Dashboard </Typography>
+                <Typography variant='h2'> Create new instance </Typography>
+                <Typography variant='h2'> Overview </Typography>
                 <Typography variant='h3'> Limits </Typography>
                 <Grid container spacing={3}>
                     <Grid sm={6} md={4} lg={3} item={true}>
@@ -73,6 +74,7 @@ export const Dashboard = () => {
                         </HeaderPaper>
                     </Grid>
                 </Grid>
+                <Typography variant='h3'> Instances </Typography>
             </Container>
         </div>
     )
