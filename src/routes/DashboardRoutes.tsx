@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core"
 import { Menu } from "@material-ui/icons"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { Dashboard } from "../components/Dashboard";
+import { Dashboard } from "../components/Dashboard/Dashboard";
 import { UniversalDrawer } from "../components/UniversalDrawer";
 import { DashboardDrawerList } from "../constants/RoutesConstants";
 

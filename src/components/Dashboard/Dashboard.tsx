@@ -2,7 +2,7 @@ import React from "react"
 import { Grid, Container, Typography, makeStyles, createStyles, Theme } from "@material-ui/core"
 import { VictoryPie } from "victory";
 import { useTheme } from '@material-ui/core/styles';
-import { HeaderPaper } from "./HeaderPaper";
+import { HeaderPaper } from "../HeaderPaper";
 import { InstancesTable } from "./InstancesTable";
 
 const useStyles = makeStyles((theme: Theme) =>
