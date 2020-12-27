@@ -40,6 +40,7 @@ export const CreateButtons = () => {
                 color="secondary"
                 size="large"
                 startIcon={<AddCircleIcon />}
+                href="/dashboard/create-new-instance"
             >
                 Create custom instance
                     </Button>
