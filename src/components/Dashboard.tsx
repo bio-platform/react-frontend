@@ -3,6 +3,7 @@ import { Grid, Container, Typography, makeStyles, createStyles, Theme } from "@m
 import { VictoryPie } from "victory";
 import { useTheme } from '@material-ui/core/styles';
 import { HeaderPaper } from "./HeaderPaper";
+import { InstancesTable } from "./InstancesTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -63,6 +64,7 @@ export const Dashboard = () => {
                     </Grid>
                 </Grid>
                 <Typography variant='h3'> Instances </Typography>
+                <InstancesTable />
             </Container>
         </div>
     )
