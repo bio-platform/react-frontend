@@ -12,10 +12,10 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(2),
             textAlign: 'center',
             color: theme.palette.text.secondary,
-            marginTop: 35,
+            marginTop: theme.spacing(2),
         },
         paperHeader: {
-            marginTop: -35,
+            marginTop: -theme.spacing(5),
             padding: theme.spacing(2),
             backgroundColor: theme.palette.info.main,
             color: theme.palette.primary.contrastText,
