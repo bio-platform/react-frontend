@@ -1,4 +1,6 @@
 import React from "react";
-import DashboardIcon from '@material-ui/icons/Dashboard';
+import ListIcon from '@material-ui/icons/List';
+import InfoIcon from '@material-ui/icons/Info';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
-export const DashboardDrawerList = [['Dashboard', <DashboardIcon />], ['Instances', <DashboardIcon />], ['Volumes', <DashboardIcon />]];
+export const DashboardDrawerList = [['Create new instance', <AddCircleIcon />], ['Overview', <InfoIcon />], ['Instances', <ListIcon />]];
