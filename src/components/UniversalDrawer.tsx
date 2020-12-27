@@ -1,5 +1,5 @@
 import React from "react"
-import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core"
+import { Divider, Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, Link } from "@material-ui/core"
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 type UniversalDrawerProps = {
@@ -9,6 +9,7 @@ type UniversalDrawerProps = {
 }
 
 export const UniversalDrawer = (props: UniversalDrawerProps) => {
+
     return (<Drawer
         variant="persistent"
         anchor="left"
@@ -22,12 +23,14 @@ export const UniversalDrawer = (props: UniversalDrawerProps) => {
         <Divider />
         <List>
             {props.itemList.map((item) => (
-                <ListItem button key={item[0].toString()}>
-                    <ListItemIcon>{item[1]}</ListItemIcon>
-                    <ListItemText primary={item[0]} />
-                </ListItem>
+                <Link href={`#${item[2].toString()}`} color="textPrimary" underline="none">
+                    <ListItem button key={item[0].toString()}>
+                        <ListItemIcon>{item[1]}</ListItemIcon>
+                        <ListItemText primary={item[0]} />
+                    </ListItem>
+                </Link>
             ))}
         </List>
         <Divider />
-    </Drawer>)
+    </Drawer >)
 }
