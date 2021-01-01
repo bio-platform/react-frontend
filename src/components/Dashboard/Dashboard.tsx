@@ -1,28 +1,13 @@
 import React from "react"
-import { Container, Typography, makeStyles, createStyles, Theme, Box, Divider } from "@material-ui/core"
+import { Container, Typography, Box, Divider } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { CreateButtons } from "./CreateButtons";
 import { DashboardDrawerList } from "../../constants/RoutesConstants";
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            flexGrow: 1,
-        },
-        buttons: {
-            '& > *': {
-                margin: theme.spacing(1),
-            },
-        }
-    }),
-);
-
 export const Dashboard = () => {
-    const classes = useStyles();
-
     return (
-        <div className={classes.root} >
+        <div>
             <Container maxWidth='xl'>
                 <Box mt={2} mb={3} id={DashboardDrawerList[0][2].toString()}>
                     <Typography variant='h2'> Create new instance </Typography>
