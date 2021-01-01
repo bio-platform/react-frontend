@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 import { Dashboard } from "../components/dashboard/Dashboard";
 import { UniversalDrawer } from "../components/UniversalDrawer";
 import { DashboardDrawerList } from "../constants/RoutesConstants";
-import { WizardWrapper } from "../components/wizard/WizardWrapper";
+import { NewInstanceWizard } from "../components/wizard/NewInstanceWizard";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -54,7 +54,7 @@ export const DashboardRoutes = () => {
                     <Dashboard />
                 </Route>
                 <Route path='/dashboard/create-new-instance'>
-                    <WizardWrapper />
+                    <NewInstanceWizard />
                 </Route>
                 <Redirect to="/dashboard/overview" from="/dashboard" />
             </Switch>
