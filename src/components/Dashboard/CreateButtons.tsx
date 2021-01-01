@@ -42,6 +42,7 @@ export const CreateButtons = () => {
                 startIcon={<AddCircleIcon />}
                 href="/dashboard/create-new-instance"
             >
+                {/* // TODO check if user uploaded ssh key */}
                 Create custom instance
                     </Button>
         </div>
