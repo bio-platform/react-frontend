@@ -10,6 +10,25 @@ export const login = async () => {
         post_logout_redirect_uri: 'localhost:4200/signin/',
     })
 
+    console.log('jedna')
+
     const user = await mgr.getUser()
+
+    if (user) {
+        
+    } else {
+        mgr.signinRedirect();
+    }
+
+    // if (user) {
+    //     const requestOptions = {
+    //         method: 'POST',
+    //         headers: { 'Content-Type': 'application/json' },
+    //         body: JSON.stringify({ token: user.id_token })
+    //     };
+    //     await fetch('https://ip-147-251-124-112.flt.cloud.muni.cz/api/', requestOptions)
+    // }
+
     return user;
+
 }

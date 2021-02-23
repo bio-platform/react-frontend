@@ -32,7 +32,7 @@ export const SignIn = () => {
                 <Typography component="h3" variant="h3">
                     Sign in
                 </Typography>
-                {token != '' && <Typography>{token}</Typography>}
+                {token !== '' && <Typography>{token}</Typography>}
                 <Button
                     type="submit"
                     fullWidth
@@ -44,7 +44,7 @@ export const SignIn = () => {
                         if (user) {
                             setToken(user.id_token)
                         } else {
-                            setToken('si neco posral');
+                            setToken('si neco pokazil');
                         }
                     }}
                 >
