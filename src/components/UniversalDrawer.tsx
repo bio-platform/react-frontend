@@ -23,7 +23,7 @@ export const UniversalDrawer = (props: UniversalDrawerProps) => {
         <Divider />
         <List>
             {props.itemList.map((item) => (
-                <Link href={`#${item[2].toString()}`} color="textPrimary" underline="none">
+                <Link key={item[0].toString()} href={`#${item[2].toString()}`} color="textPrimary" underline="none">
                     <ListItem button key={item[0].toString()}>
                         <ListItemIcon>{item[1]}</ListItemIcon>
                         <ListItemText primary={item[0]} />

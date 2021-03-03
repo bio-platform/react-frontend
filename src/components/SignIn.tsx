@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { login } from "../routes/signIn/login";
+import { AuthContextType, AuthContext } from "../routes/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -21,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
 
 export const SignIn = () => {
     const classes = useStyles();
-    const [token, setToken] = useState('');
+    const [email, setEmail] = useState('');
+    const context = useContext<AuthContextType>(AuthContext);
 
     return (
         <Container component="main" maxWidth="xs">
@@ -32,7 +34,7 @@ export const SignIn = () => {
                 <Typography component="h3" variant="h3">
                     Sign in
                 </Typography>
-                {token !== '' && <Typography>{token}</Typography>}
+                {email !== '' && <Typography>{email}</Typography>}
                 <Button
                     type="submit"
                     fullWidth
@@ -42,9 +44,10 @@ export const SignIn = () => {
                     onClick={async () => {
                         const user = await login()
                         if (user) {
-                            setToken(user.access_token)
+                            context?.setUser(user);
+                            // setEmail(user.email);
                         } else {
-                            setToken('redirecting...');
+                            setEmail('redirecting...');
                         }
                     }}
                 >

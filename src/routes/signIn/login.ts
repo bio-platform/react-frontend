@@ -1,7 +1,8 @@
 import axios from "axios";
 import { UserManager } from "oidc-client";
+import { User } from "../../models/User";
 
-export const login = async () => {
+export const login = async (): Promise<User | null> => {
     const mgr = new UserManager({
         response_type: 'id_token token',
         scope: 'openid profile email eduperson_entitlement',
@@ -15,22 +16,28 @@ export const login = async () => {
 
     if (user) {
 
-        try{
-        // const respose = await axios.post('https://ip-147-251-124-112.flt.cloud.muni.cz/api//', { token: user.access_token }, {
-        const respose = await axios.post('http://localhost:5000/', { token: user.access_token }, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            withCredentials: true,
-        });
-    } catch (err) {
-        console.error("SignIn failed");
-    }
+        mgr.startSilentRenew();
+
+        try {
+            // const respose = await axios.post('https://ip-147-251-124-112.flt.cloud.muni.cz/api//', { token: user.access_token }, {
+            const respose = await axios.post('http://localhost:5000/', { token: user.access_token }, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                withCredentials: true,
+            });
+        } catch (err) {
+            console.error("SignIn failed");
+            return null;
+        }
 
     } else {
         mgr.signinRedirect();
+        return null;
     }
 
-    return user;
+    const customUser: User = { token: user.access_token, email: user.profile.email!, name: user.profile.name! };
+
+    return customUser;
 
 }
