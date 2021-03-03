@@ -81,7 +81,6 @@ export const NewInstanceWizard = () => {
                                 <CheckCircleOutlineIcon color='action' fontSize="large" />
                                 <Typography variant='h6' >Instance created</Typography>
                             </div>}
-
                     </Box>
                 )
             default:

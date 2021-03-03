@@ -42,7 +42,7 @@ export const SignIn = () => {
                     onClick={async () => {
                         const user = await login()
                         if (user) {
-                            setToken(user.id_token)
+                            setToken(user.access_token)
                         } else {
                             setToken('si neco pokazil');
                         }
