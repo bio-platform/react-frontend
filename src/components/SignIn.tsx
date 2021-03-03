@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react"
 import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import { login } from "../routes/signIn/login";
 import { AuthContextType, AuthContext } from "../routes/AuthProvider";
 
 const useStyles = makeStyles((theme) => ({
@@ -42,13 +41,7 @@ export const SignIn = () => {
                     color="primary"
                     className={classes.submit}
                     onClick={async () => {
-                        const user = await login()
-                        if (user) {
-                            context?.setUser(user);
-                            // setEmail(user.email);
-                        } else {
-                            setEmail('redirecting...');
-                        }
+                        context?.login();
                     }}
                 >
                     Sign In

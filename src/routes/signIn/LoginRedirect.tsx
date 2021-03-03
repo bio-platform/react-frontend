@@ -1,33 +1,16 @@
-import React, { useEffect } from "react"
-import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import React, { useContext } from "react"
 import { UserManager } from "oidc-client";
-import { useHistory } from 'react-router'
-
-const useStyles = makeStyles((theme) => ({
-    paper: {
-        marginTop: theme.spacing(8),
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    avatar: {
-        margin: theme.spacing(1),
-        backgroundColor: theme.palette.secondary.main,
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2),
-    },
-}));
+import { AuthContextType, AuthContext } from "../AuthProvider";
+import { useHistory } from "react-router-dom";
 
 export const LoginRedirect = () => {
-    const classes = useStyles();
     const history = useHistory();
+    const context = useContext<AuthContextType>(AuthContext);
 
-    new UserManager({}).signinRedirectCallback().then(function () {
-        console.log("got logged");
+    new UserManager({}).signinRedirectCallback().then(async () => {
+        await context?.login();
         history.push('/auth');
-    }).catch(function (e) {
+    }).catch((e) => {
         console.log(e);
     });
 
