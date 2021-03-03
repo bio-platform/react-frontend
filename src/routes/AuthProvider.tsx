@@ -24,8 +24,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const mgr = new UserManager({
         response_type: 'id_token token',
         scope: 'openid profile email eduperson_entitlement',
-        authority: 'https://login.cesnet.cz/oidc/',
-        client_id: 'ca73360a-c510-4bc0-afb5-f5c5eee603ca',
+        authority: process.env.REACT_APP_AUTHORITY,
+        client_id: process.env.REACT_APP_CLIENT_ID,
         redirect_uri: 'http://localhost:4200/callback/',
         post_logout_redirect_uri: 'localhost:4200/signin/',
     })

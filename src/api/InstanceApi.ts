@@ -7,6 +7,6 @@ export const createInstanceDummy = async () => {
 }
 
 export const getAllInstances = async (token: string) => {
-
+  
 
 }
