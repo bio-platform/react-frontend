@@ -44,7 +44,7 @@ export const SignIn = () => {
                         if (user) {
                             setToken(user.access_token)
                         } else {
-                            setToken('si neco pokazil');
+                            setToken('redirecting...');
                         }
                     }}
                 >
