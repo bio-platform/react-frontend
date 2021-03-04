@@ -7,7 +7,7 @@ import { ConfirmationDialog } from "./Dialogs";
 
 type DeleteInstanceButtonProps = {
     instance: Instance;
-
+    reloadData: () => void;
 }
 
 export const DeleteInstanceButton = (props: DeleteInstanceButtonProps) => {
@@ -28,7 +28,8 @@ export const DeleteInstanceButton = (props: DeleteInstanceButtonProps) => {
             handleClose={handleClose}
             open={open}
             handleConfirm={async () => {
-                await deleteInstance(props.instance)
+                await deleteInstance(props.instance);
+                await props.reloadData();
             }}
             />
         <IconButton aria-label="delete" onClick={handleClickOpen}>

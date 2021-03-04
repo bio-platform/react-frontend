@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Container, Typography, Box, Divider, Button } from "@material-ui/core"
+import { Container, Typography, Box, Divider, Button, CircularProgress } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { CreateButtons } from "./CreateButtons";
@@ -23,21 +23,25 @@ export const Dashboard = () => {
 
     const selectTestNetwork = () => {
         for (let network of networks) {
-            if (network.name == "78-128-250-pers-proj-net") {
+            if (network.name === "78-128-250-pers-proj-net") {
                 return network.id;
             }
         }
         return '';
     }
 
+    const reloadData = async () => {
+        const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys()]);
+        setLimit(responses[0]);
+        setInstances(responses[1]);
+        setNetworks(responses[2]);
+        setKeyPairs(responses[3]);
+        setLoading(false);
+    }
+
     useEffect(() => {
         (async () => {
-            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys()]);
-            setLimit(responses[0]);
-            setInstances(responses[1]);
-            setNetworks(responses[2]);
-            setKeyPairs(responses[3]);
-            setLoading(false);
+            await reloadData();
         })();
     }, [])
 
@@ -52,13 +56,14 @@ export const Dashboard = () => {
                     <Typography variant='h2'> Create new instance </Typography>
                     <Divider />
                 </Box>
-                <Button onClick={() => {
+                <Button onClick={async () => {
                     const metaData = { Bioclass_user: context?.user?.name!, Bioclass_email: context?.user?.email! };
                     const instanceData = {
                         flavor: "standard.2core-16ram", image: "debian-9-x86_64_bioconductor",
                         key_name: keyPairs[0].name, servername: 'Bioconductor', network_id: selectTestNetwork(), metadata: metaData
                     };
-                    postInstance(instanceData);
+                    await postInstance(instanceData);
+                    await reloadData();
                 }}>
                     Test bioconductor
                 </Button>
@@ -74,7 +79,7 @@ export const Dashboard = () => {
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
                     <Typography variant='h3'> Instances </Typography>
                 </Box>
-                <InstancesTable instances={instances} />
+                <InstancesTable instances={instances} reloadData={reloadData} />
             </Container>
         </div >
     )

@@ -27,9 +27,10 @@ const rows = [
 
 type Props = {
     instances: Instance[] | undefined;
+    reloadData: () => void;
 }
 
-export const InstancesTable = ({ instances }: Props) => {
+export const InstancesTable = ({ instances, reloadData }: Props) => {
     const classes = useStyles();
 
     if (instances === undefined) {
@@ -58,7 +59,7 @@ export const InstancesTable = ({ instances }: Props) => {
                             <TableCell align="left">{instance.status}</TableCell>
                             <TableCell align="left">{instance.status} GB</TableCell>
                             <TableCell align="center">
-                                <DeleteInstanceButton instance={instance} />
+                                <DeleteInstanceButton instance={instance} reloadData={reloadData} />
                             </TableCell>
                         </TableRow>
                     ))}
