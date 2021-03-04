@@ -76,7 +76,7 @@ export const ChooseProject = () => {
                             onClick={async () => {
                                 await putProject(selectedProject!);
                                 context?.setProject(selectedProject!);
-                                // history.push('/dashboard');
+                                history.push('/dashboard/overview');
                             }}
                         >
 
