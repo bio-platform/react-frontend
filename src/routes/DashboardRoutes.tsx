@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { AppBar, Button, IconButton, makeStyles, createStyles, Theme, Toolbar, Link } from "@material-ui/core"
 import { Menu } from "@material-ui/icons"
 import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
@@ -6,6 +6,8 @@ import { Dashboard } from "../components/dashboard/Dashboard";
 import { UniversalDrawer } from "../components/UniversalDrawer";
 import { DashboardDrawerList } from "../constants/RoutesConstants";
 import { NewInstanceWizard } from "../components/wizard/NewInstanceWizard";
+import { AuthContextType, AuthContext } from "./AuthProvider";
+import { ChooseProject } from "../components/dashboard/ChooseProject";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,6 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export const DashboardRoutes = () => {
     const classes = useStyles();
     const [open, setOpen] = useState<boolean>(false);
+
+    const context = useContext<AuthContextType>(AuthContext);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -56,7 +60,10 @@ export const DashboardRoutes = () => {
                 <Route path='/dashboard/create-new-instance'>
                     <NewInstanceWizard />
                 </Route>
-                <Redirect to="/dashboard/overview" from="/dashboard" />
+                <Route path='/dashboard/choose-project' >
+                    <ChooseProject />
+                </Route>
+                {context?.project ? <Redirect to="/dashboard/overview" from="/dashboard" /> : <Redirect to="/dashboard/choose-project" from="/dashboard" />}
             </Switch>
         </Router>
     )

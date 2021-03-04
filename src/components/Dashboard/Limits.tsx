@@ -1,9 +1,14 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { Grid, useTheme } from "@material-ui/core"
 import { VictoryPie } from "victory"
 import { HeaderPaper } from "../HeaderPaper"
+import { getLimits } from "../../api/UserApi"
 
 export const Limits = () => {
+    useEffect(() => {
+        // getLimits();
+    }, [])
+
     const theme = useTheme();
 
     return (

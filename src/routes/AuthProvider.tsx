@@ -1,11 +1,15 @@
 import axios from 'axios';
 import { UserManager } from 'oidc-client';
 import React, { createContext, useState } from 'react';
+import { API_URL, OIDC_AUTHORITY, OIDC_CLIENT_ID, OIDC_POST_LOGOUT_REDIRECT_URI, OIDC_REDIRECT_URI } from '../constants/Environment';
+import { Project } from '../models/Project';
 import { User } from '../models/User';
 
 export type AuthContextType = {
-    user: User | null;
+    user: User | undefined;
     setUser: (user: User) => void;
+    project: Project | undefined;
+    setProject: (project: Project) => void;
     loadingAuthState: boolean;
     mgr: UserManager;
     login: () => Promise<void>;
@@ -18,16 +22,17 @@ type AuthProviderProps = {
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | undefined>(undefined);
+    const [project, setProject] = useState<Project | undefined>(undefined);
     const [loadingAuthState, setLoadingAuthState] = useState(false);
 
     const mgr = new UserManager({
         response_type: 'id_token token',
         scope: 'openid profile email eduperson_entitlement',
-        authority: process.env.REACT_APP_AUTHORITY,
-        client_id: process.env.REACT_APP_CLIENT_ID,
-        redirect_uri: 'http://localhost:4200/callback/',
-        post_logout_redirect_uri: 'localhost:4200/signin/',
+        authority: OIDC_AUTHORITY,
+        client_id: OIDC_CLIENT_ID,
+        redirect_uri: OIDC_REDIRECT_URI,
+        post_logout_redirect_uri: OIDC_POST_LOGOUT_REDIRECT_URI,
     })
 
     const login = async () => {
@@ -39,7 +44,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             mgr.startSilentRenew();
 
             // const respose = await axios.post('https://ip-147-251-124-112.flt.cloud.muni.cz/api//', { token: user.access_token }, {
-            const respose = await axios.post('http://localhost:5000/', { token: oidcUser.access_token }, {
+            const respose = await axios.post(API_URL, { token: oidcUser.access_token }, {
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -57,6 +62,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             value={{
                 user,
                 setUser,
+                project,
+                setProject,
                 loadingAuthState,
                 mgr,
                 login,

@@ -1,11 +1,20 @@
-import React from "react"
+import React, { useContext, useEffect } from "react"
 import { Container, Typography, Box, Divider } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { CreateButtons } from "./CreateButtons";
 import { DashboardDrawerList } from "../../constants/RoutesConstants";
+import { getProjects } from "../../api/UserApi";
+import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 
 export const Dashboard = () => {
+    const context = useContext<AuthContextType>(AuthContext);
+    console.log(context?.user);
+
+    useEffect(() => {
+        getProjects();
+    }, [])
+
     return (
         <div>
             <Container maxWidth='xl'>
