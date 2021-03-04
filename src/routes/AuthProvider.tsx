@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { UserManager } from 'oidc-client';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { API_URL, OIDC_AUTHORITY, OIDC_CLIENT_ID, OIDC_POST_LOGOUT_REDIRECT_URI, OIDC_REDIRECT_URI } from '../constants/Environment';
 import { Project } from '../models/Project';
 import { User } from '../models/User';
 
 export type AuthContextType = {
     user: User | undefined;
-    setUser: (user: User) => void;
+    setUser: (user: User | undefined) => void;
     project: Project | undefined;
-    setProject: (project: Project) => void;
+    setProject: (project: Project | undefined) => void;
     loadingAuthState: boolean;
     mgr: UserManager;
     login: () => Promise<void>;
@@ -25,6 +25,47 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | undefined>(undefined);
     const [project, setProject] = useState<Project | undefined>(undefined);
     const [loadingAuthState, setLoadingAuthState] = useState(false);
+
+    useEffect(() => {
+        if (sessionStorage.getItem('userToken') && sessionStorage.getItem('userName') && sessionStorage.getItem('userEmail')) {
+            setUser({
+                token: sessionStorage.getItem('userToken')!,
+                name: sessionStorage.getItem('userName')!,
+                email: sessionStorage.getItem('userEmail')!
+            });
+        }
+        if (sessionStorage.getItem('projectId') && sessionStorage.getItem('projectName')) {
+            setProject({
+                id: sessionStorage.getItem('projectId')!,
+                name: sessionStorage.getItem('projectName')!
+            });
+        }
+    }, [])
+
+
+    const handleSetUser = (user: User | undefined) => {
+        if (user) {
+            sessionStorage.setItem('userToken', user.token);
+            sessionStorage.setItem('userName', user.name);
+            sessionStorage.setItem('userEmail', user.email);
+        } else {
+            sessionStorage.removeItem('userToken');
+            sessionStorage.removeItem('userName');
+            sessionStorage.removeItem('userEmail');
+        }
+        setUser(user);
+    }
+
+    const handleSetProject = (project: Project | undefined) => {
+        if (project) {
+            sessionStorage.setItem('projectId', project.id);
+            sessionStorage.setItem('projectName', project.name);
+        } else {
+            sessionStorage.removeItem('projectId');
+            sessionStorage.removeItem('projectName');
+        }
+        setProject(project);
+    }
 
     const mgr = new UserManager({
         response_type: 'id_token token',
@@ -50,7 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 },
                 withCredentials: true,
             });
-            setUser({ token: oidcUser.access_token, email: oidcUser.profile.email!, name: oidcUser.profile.name! });
+            handleSetUser({ token: oidcUser.access_token, email: oidcUser.profile.email!, name: oidcUser.profile.name! });
             console.log("got logged");
         } else {
             mgr.signinRedirect();
@@ -60,13 +101,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     return (
         <AuthContext.Provider
             value={{
-                user,
-                setUser,
-                project,
-                setProject,
-                loadingAuthState,
-                mgr,
-                login,
+                user: user,
+                setUser: handleSetUser,
+                project: project,
+                setProject: handleSetProject,
+                loadingAuthState: loadingAuthState,
+                mgr: mgr,
+                login: login,
             }}>
             {children}
         </AuthContext.Provider>

@@ -29,6 +29,10 @@ export const ChooseProject = () => {
         return (<Container maxWidth='xl'><LoadingPage /></Container>)
     }
 
+    if (context?.project) {
+        history.push('/dashboard/overview');
+    }
+
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedProject(projects.find(element => element.id === event.target.value as string));
     };
