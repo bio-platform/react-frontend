@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react"
 import { Container, Typography, Box, Button } from "@material-ui/core"
-import { getProjects } from "../../api/UserApi";
+import { getProjects, putProject } from "../../api/UserApi";
 import { Project } from "../../models/Project";
 import { LoadingPage } from "../static/LoadingPage";
 import { Select } from "@material-ui/core";
@@ -17,21 +17,22 @@ export const ChooseProject = () => {
     const history = useHistory();
 
     useEffect(() => {
-        (async () => {
-            const loadedProjects = await getProjects();
-            setProjects(loadedProjects);
-            setLoading(false);
-        })();
-
+        if (context?.project) {
+            history.push('/dashboard/overview');
+        } else {
+            (async () => {
+                const loadedProjects = await getProjects();
+                setProjects(loadedProjects);
+                setLoading(false);
+            })();
+        }
     }, [])
 
     if (loading) {
         return (<Container maxWidth='xl'><LoadingPage /></Container>)
     }
 
-    if (context?.project) {
-        history.push('/dashboard/overview');
-    }
+
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSelectedProject(projects.find(element => element.id === event.target.value as string));
@@ -72,9 +73,10 @@ export const ChooseProject = () => {
                             size="large"
                             color="primary"
                             disabled={selectedProject === undefined}
-                            onClick={() => {
+                            onClick={async () => {
+                                await putProject(selectedProject!);
                                 context?.setProject(selectedProject!);
-                                history.push('/dashboard');
+                                // history.push('/dashboard');
                             }}
                         >
 

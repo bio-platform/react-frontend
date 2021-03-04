@@ -1,11 +1,17 @@
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, makeStyles } from '@material-ui/core';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { Instance } from '../../models/Instance';
 
 const useStyles = makeStyles({
     table: {
         minWidth: 650,
     },
+    tableRow: {
+        '& > *': {
+            fontSize: '1rem',
+        },
+    }
 });
 
 const createData = (name: string, floatingIp: String, cores: number, ram: number) => {
@@ -17,14 +23,22 @@ const rows = [
     createData('Test 2', "None", 1, 37),
 ];
 
-export const InstancesTable = () => {
+type Props = {
+    instances: Instance[] | undefined;
+}
+
+export const InstancesTable = ({ instances }: Props) => {
     const classes = useStyles();
+
+    if (instances === undefined) {
+        return (<Typography>Cannot load instances</Typography>)
+    }
 
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="instances table">
                 <TableHead>
-                    <TableRow>
+                    <TableRow className={classes.tableRow}>
                         <TableCell>Instance name</TableCell>
                         <TableCell align="left">Floating IP</TableCell>
                         <TableCell align="left">Cores</TableCell>
@@ -33,14 +47,14 @@ export const InstancesTable = () => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
-                        <TableRow key={row.name}>
+                    {instances.map((instance) => (
+                        <TableRow className={classes.tableRow} key={instance.id}>
                             <TableCell component="th" scope="row">
-                                {row.name}
+                                {instance.name}
                             </TableCell>
-                            <TableCell align="left">{row.floatingIp}</TableCell>
-                            <TableCell align="left">{row.cores}</TableCell>
-                            <TableCell align="left">{row.ram} GB</TableCell>
+                            <TableCell align="left">{instance.status}</TableCell>
+                            <TableCell align="left">{instance.status}</TableCell>
+                            <TableCell align="left">{instance.status} GB</TableCell>
                             <TableCell align="center">
                                 <IconButton aria-label="delete">
                                     <DeleteIcon />
