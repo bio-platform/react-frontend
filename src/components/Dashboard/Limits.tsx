@@ -31,7 +31,7 @@ export const Limits = ({ limit }: Props) => {
                         <HeaderPaper title={element.name + element.used + '/' + element.limit + (element.name === 'RAM ' ? ' MB' : '')}>
                             <VictoryPie
                                 colorScale={[theme.palette.error.main, theme.palette.success.main]}
-                                data={[{ x: "Used", y: element.used * 100 + 1 }, { x: "Available", y: element.limit * 100 + 1 - (element.used * 100 + 1)}]}
+                                data={[{ x: "Used", y: element.used }, { x: "Available", y: element.limit - (element.used)}]}
                                 style={{ labels: { fontSize: 20, fill: "white" } }}
                                 labelRadius={50} />
                         </HeaderPaper>

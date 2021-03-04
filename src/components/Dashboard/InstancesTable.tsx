@@ -2,6 +2,7 @@ import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, makeStyles, Typography } from '@material-ui/core';
 import { Instance } from '../../models/Instance';
+import { deleteInstance } from '../../api/InstanceApi';
 
 const useStyles = makeStyles({
     table: {
@@ -56,7 +57,9 @@ export const InstancesTable = ({ instances }: Props) => {
                             <TableCell align="left">{instance.status}</TableCell>
                             <TableCell align="left">{instance.status} GB</TableCell>
                             <TableCell align="center">
-                                <IconButton aria-label="delete">
+                                <IconButton aria-label="delete" onClick={async () => {
+                                    await deleteInstance(instance)
+                                }}>
                                     <DeleteIcon />
                                 </IconButton>
                             </TableCell>

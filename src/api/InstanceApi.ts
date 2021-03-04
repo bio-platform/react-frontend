@@ -50,3 +50,12 @@ export const postKeyPair = async (name: string) => {
     withCredentials: true,
   });
 }
+
+export const deleteInstance = async (instance: Instance) => {
+  const response = await axios.delete(API_URL + 'instances/' + instance.id + '/', {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+}

@@ -1,27 +1,42 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Container, Typography, Box, Divider } from "@material-ui/core"
+import { Container, Typography, Box, Divider, Button } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { CreateButtons } from "./CreateButtons";
 import { DashboardDrawerList } from "../../constants/RoutesConstants";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { Limit } from "../../models/Limit";
-import { getLimits } from "../../api/UserApi";
+import { getKeys, getLimits, getNetworks } from "../../api/UserApi";
 import { LoadingPage } from "../static/LoadingPage";
-import { getInstances } from "../../api/InstanceApi";
+import { getInstances, postInstance } from "../../api/InstanceApi";
 import { Instance } from "../../models/Instance";
+import { Network } from "../../models/Network";
+import { KeyPair } from "../../models/KeyPair";
 
 export const Dashboard = () => {
     const [limit, setLimit] = useState<Limit | undefined>(undefined);
     const [instances, setInstances] = useState<Instance[]>([])
+    const [networks, setNetworks] = useState<Network[]>([]);
+    const [keyPairs, setKeyPairs] = useState<KeyPair[]>([])
     const [loading, setLoading] = useState(true);
     const context = useContext<AuthContextType>(AuthContext);
 
+    const selectTestNetwork = () => {
+        for (let network of networks) {
+            if (network.name == "78-128-250-pers-proj-net") {
+                return network.id;
+            }
+        }
+        return '';
+    }
+
     useEffect(() => {
         (async () => {
-            const responses = await Promise.all([getLimits(), getInstances()]);
+            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys()]);
             setLimit(responses[0]);
             setInstances(responses[1]);
+            setNetworks(responses[2]);
+            setKeyPairs(responses[3]);
             setLoading(false);
         })();
     }, [])
@@ -37,6 +52,16 @@ export const Dashboard = () => {
                     <Typography variant='h2'> Create new instance </Typography>
                     <Divider />
                 </Box>
+                <Button onClick={() => {
+                    const metaData = { Bioclass_user: context?.user?.name!, Bioclass_email: context?.user?.email! };
+                    const instanceData = {
+                        flavor: "standard.2core-16ram", image: "debian-9-x86_64_bioconductor",
+                        key_name: keyPairs[0].name, servername: 'Bioconductor', network_id: selectTestNetwork(), metadata: metaData
+                    };
+                    postInstance(instanceData);
+                }}>
+                    Test bioconductor
+                </Button>
                 <CreateButtons />
                 <Box mt={2} mb={3}>
                     <Typography variant='h2'> Overview </Typography>
@@ -49,7 +74,7 @@ export const Dashboard = () => {
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
                     <Typography variant='h3'> Instances </Typography>
                 </Box>
-                <InstancesTable instances={instances}/>
+                <InstancesTable instances={instances} />
             </Container>
         </div >
     )
