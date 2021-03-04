@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Container, Typography, Box, Divider, Button, CircularProgress } from "@material-ui/core"
+import { Container, Typography, Box, Divider, Button } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { CreateButtons } from "./CreateButtons";

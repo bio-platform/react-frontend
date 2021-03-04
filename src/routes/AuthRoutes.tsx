@@ -1,4 +1,3 @@
-import { CircularProgress } from "@material-ui/core";
 import React, { useContext } from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import { SignIn } from "../components/SignIn";
@@ -6,12 +5,6 @@ import { AuthContextType, AuthContext } from "./AuthProvider";
 
 export const AuthRoutes = () => {
     const context = useContext<AuthContextType>(AuthContext);
-
-    if (context!.loadingAuthState) {
-        return (
-            <CircularProgress />
-        );
-    }
 
     if (context?.user){
         return <Redirect to="/dashboard"/>

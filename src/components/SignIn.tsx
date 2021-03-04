@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { AuthContextType, AuthContext } from "../routes/AuthProvider";
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 export const SignIn = () => {
     const classes = useStyles();
-    const [email, setEmail] = useState('');
     const context = useContext<AuthContextType>(AuthContext);
 
     return (
@@ -33,7 +32,6 @@ export const SignIn = () => {
                 <Typography component="h3" variant="h3">
                     Sign in
                 </Typography>
-                {email !== '' && <Typography>{email}</Typography>}
                 <Button
                     type="submit"
                     fullWidth

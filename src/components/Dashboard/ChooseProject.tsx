@@ -26,7 +26,7 @@ export const ChooseProject = () => {
                 setLoading(false);
             })();
         }
-    }, [])
+    }, [context, history])
 
     if (loading) {
         return (<Container maxWidth='xl'><LoadingPage /></Container>)

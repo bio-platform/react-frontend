@@ -1,8 +1,6 @@
 import React from 'react';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, makeStyles, Typography } from '@material-ui/core';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography } from '@material-ui/core';
 import { Instance } from '../../models/Instance';
-import { deleteInstance } from '../../api/InstanceApi';
 import { DeleteInstanceButton } from '../static/CustomButtons';
 
 const useStyles = makeStyles({
@@ -15,15 +13,6 @@ const useStyles = makeStyles({
         },
     }
 });
-
-const createData = (name: string, floatingIp: String, cores: number, ram: number) => {
-    return { name, floatingIp, cores, ram };
-}
-
-const rows = [
-    createData('Test 1', "65.42.66.76", 4, 24),
-    createData('Test 2', "None", 1, 37),
-];
 
 type Props = {
     instances: Instance[] | undefined;

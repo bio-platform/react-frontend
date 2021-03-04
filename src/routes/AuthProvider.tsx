@@ -10,7 +10,6 @@ export type AuthContextType = {
     setUser: (user: User | undefined) => void;
     project: Project | undefined;
     setProject: (project: Project | undefined) => void;
-    loadingAuthState: boolean;
     mgr: UserManager;
     login: () => Promise<void>;
 } | null;
@@ -24,7 +23,6 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [user, setUser] = useState<User | undefined>(undefined);
     const [project, setProject] = useState<Project | undefined>(undefined);
-    const [loadingAuthState, setLoadingAuthState] = useState(false);
 
     useEffect(() => {
         if (sessionStorage.getItem('userToken') && sessionStorage.getItem('userName') && sessionStorage.getItem('userEmail')) {
@@ -85,14 +83,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             mgr.startSilentRenew();
 
             // const respose = await axios.post('https://ip-147-251-124-112.flt.cloud.muni.cz/api//', { token: user.access_token }, {
-            const respose = await axios.post(API_URL, { token: oidcUser.access_token }, {
+            await axios.post(API_URL, { token: oidcUser.access_token }, {
                 headers: {
                     "Content-Type": "application/json",
                 },
                 withCredentials: true,
             });
             handleSetUser({ token: oidcUser.access_token, email: oidcUser.profile.email!, name: oidcUser.profile.name! });
-            console.log("got logged");
         } else {
             mgr.signinRedirect();
         }
@@ -105,7 +102,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 setUser: handleSetUser,
                 project: project,
                 setProject: handleSetProject,
-                loadingAuthState: loadingAuthState,
                 mgr: mgr,
                 login: login,
             }}>
