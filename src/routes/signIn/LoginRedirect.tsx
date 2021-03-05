@@ -9,7 +9,7 @@ export const LoginRedirect = () => {
 
     new UserManager({}).signinRedirectCallback().then(async () => {
         await context?.login();
-        history.push('/auth');
+        history.push('/dashboard');
     }).catch((e) => {
         console.log(e);
     });
