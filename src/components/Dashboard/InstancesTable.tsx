@@ -46,8 +46,8 @@ export const InstancesTable = ({ instances, reloadData }: Props) => {
                                     {instance.name}
                                 </TableCell>
                                 <TableCell align="left">{instance.status}</TableCell>
-                                <TableCell align="left">{instance.status}</TableCell>
-                                <TableCell align="left">{instance.status} GB</TableCell>
+                                <TableCell align="left">{instance.flavor.vcpus}</TableCell>
+                                <TableCell align="left">{Math.floor(instance.flavor.ram/1024)} GB</TableCell>
                                 <TableCell align="center">
                                     <DeleteInstanceButton instance={instance} reloadData={reloadData} />
                                 </TableCell>
