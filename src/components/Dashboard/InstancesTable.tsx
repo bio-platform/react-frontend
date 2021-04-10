@@ -45,7 +45,7 @@ export const InstancesTable = ({ instances, reloadData }: Props) => {
                                 <TableCell component="th" scope="row">
                                     {instance.name}
                                 </TableCell>
-                                <TableCell align="left">{instance.status}</TableCell>
+                                <TableCell align="left">{instance.access_ipv4 === "" ? "None" : instance.access_ipv4}</TableCell>
                                 <TableCell align="left">{instance.flavor.vcpus}</TableCell>
                                 <TableCell align="left">{Math.floor(instance.flavor.ram/1024)} GB</TableCell>
                                 <TableCell align="center">
