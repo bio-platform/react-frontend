@@ -1,6 +1,4 @@
 export interface FloatingIP {
-    name: string;
-    id: string;
-    project_id: string;
-    status: string;
+    instance_id: string;
+    network_id: string;
 }

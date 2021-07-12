@@ -79,7 +79,7 @@ export const Dashboard = () => {
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
                     <Typography variant='h3'> Instances </Typography>
                 </Box>
-                <InstancesTable instances={instances} reloadData={reloadData} />
+                <InstancesTable instances={instances} reloadData={reloadData} networks={networks}/>
             </Container>
         </div >
     )

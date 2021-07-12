@@ -1,7 +1,10 @@
-import React from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography, Box } from '@material-ui/core';
+import React, { useContext } from 'react';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography, Box, Button } from '@material-ui/core';
 import { Instance } from '../../models/Instance';
 import { DeleteInstanceButton } from '../static/CustomButtons';
+import { addFloatingIP } from '../../api/InstanceApi';
+import { AuthContextType, AuthContext } from '../../routes/AuthProvider';
+import { Network } from '../../models/Network';
 
 const useStyles = makeStyles({
     table: {
@@ -17,10 +20,23 @@ const useStyles = makeStyles({
 type Props = {
     instances: Instance[] | undefined;
     reloadData: () => void;
+    networks: Network[] | undefined;
 }
 
-export const InstancesTable = ({ instances, reloadData }: Props) => {
+export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
     const classes = useStyles();
+    const context = useContext<AuthContextType>(AuthContext);
+
+    const selectTestNetwork = () => {
+        if (networks) {
+            for (let network of networks) {
+                if (network.name === "78-128-250-pers-proj-net") {
+                    return network.id;
+                }
+            }
+        }
+        return '';
+    }
 
     if (instances === undefined) {
         return (<Typography>Cannot load instances</Typography>)
@@ -47,9 +63,12 @@ export const InstancesTable = ({ instances, reloadData }: Props) => {
                                 </TableCell>
                                 <TableCell align="left">{instance.access_ipv4 === "" ? "None" : instance.access_ipv4}</TableCell>
                                 <TableCell align="left">{instance.flavor.vcpus}</TableCell>
-                                <TableCell align="left">{Math.floor(instance.flavor.ram/1024)} GB</TableCell>
+                                <TableCell align="left">{Math.floor(instance.flavor.ram / 1024)} GB</TableCell>
                                 <TableCell align="center">
                                     <DeleteInstanceButton instance={instance} reloadData={reloadData} />
+                                    <Button onClick={() => {
+                                        addFloatingIP({ network_id: selectTestNetwork(), instance_id: instance.id });
+                                    }}>Alocate IP</Button>
                                 </TableCell>
                             </TableRow>
                         ))}

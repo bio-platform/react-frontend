@@ -1,3 +1,4 @@
+import { FloatingIP } from './../models/FloatingIP';
 import { InstanceData } from './../models/InstanceData';
 import { Instance } from './../models/Instance';
 import axios from "axios";
@@ -35,6 +36,15 @@ export const getInstance = async (instance: Instance) => {
 
 export const postInstance = async (instanceData: InstanceData) => {
   const response = await axios.post(API_URL + 'instances/', instanceData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+}
+
+export const addFloatingIP = async (floating_ip : FloatingIP) => {
+  const response = await axios.post(API_URL + 'floating_ips/', floating_ip, {
     headers: {
       "Content-Type": "application/json",
     },
