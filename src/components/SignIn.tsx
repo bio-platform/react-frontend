@@ -24,15 +24,6 @@ export const SignIn = () => {
     const classes = useStyles();
     const context = useContext<AuthContextType>(AuthContext);
 
-    // todo delete
-    useEffect(() => {
-        const response = axios.get('https://www.boredapi.com/api/activity', {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-    }, [])
-
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
