@@ -1,7 +1,8 @@
-import React, { useContext } from "react"
+import React, { useContext, useEffect } from "react"
 import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { AuthContextType, AuthContext } from "../routes/AuthProvider";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -22,6 +23,15 @@ const useStyles = makeStyles((theme) => ({
 export const SignIn = () => {
     const classes = useStyles();
     const context = useContext<AuthContextType>(AuthContext);
+
+    // todo delete
+    useEffect(() => {
+        const response = axios.get('https://www.boredapi.com/api/activity', {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+    }, [])
 
     return (
         <Container component="main" maxWidth="xs">

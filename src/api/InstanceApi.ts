@@ -34,6 +34,7 @@ export const getInstance = async (instance: Instance) => {
   return response.data as Instance;
 }
 
+// tohle je jine  
 export const postInstance = async (instanceData: InstanceData) => {
   const response = await axios.post(API_URL + 'instances/', instanceData, {
     headers: {
