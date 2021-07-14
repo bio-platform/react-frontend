@@ -8,14 +8,16 @@ import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { Limit } from "../../models/Limit";
 import { getKeys, getLimits, getNetworks } from "../../api/UserApi";
 import { LoadingPage } from "../static/LoadingPage";
-import { getInstances, postInstance } from "../../api/InstanceApi";
+import { getConfigurations, getInstances, postInstance } from "../../api/InstanceApi";
 import { Instance } from "../../models/Instance";
 import { Network } from "../../models/Network";
 import { KeyPair } from "../../models/KeyPair";
+import { ConfigurationData } from "../../models/ConfigurationData";
 
 export const Dashboard = () => {
     const [limit, setLimit] = useState<Limit | undefined>(undefined);
     const [instances, setInstances] = useState<Instance[]>([])
+    const [configurationData, setConfigurationData] = useState<ConfigurationData[]>([]);
     const [networks, setNetworks] = useState<Network[]>([]);
     const [keyPairs, setKeyPairs] = useState<KeyPair[]>([])
     const [loading, setLoading] = useState(true);
@@ -31,12 +33,26 @@ export const Dashboard = () => {
     }
 
     const reloadData = async () => {
-        const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys()]);
-        setLimit(responses[0]);
-        setInstances(responses[1]);
-        setNetworks(responses[2]);
-        setKeyPairs(responses[3]);
-        setLoading(false);
+        try {
+            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys(), getConfigurations()]);
+            setLimit(responses[0]);
+            setInstances(responses[1]);
+            setNetworks(responses[2]);
+            setKeyPairs(responses[3]);
+            setConfigurationData(responses[4]);
+            setLoading(false);
+        } catch (err) {
+            if  (err.response.status === 401) {
+                // todo check errors for not autenticated user
+                console.log("error 401");
+            } 
+            else {
+                throw err;
+            }
+        }
+        
+       
+        
     }
 
     useEffect(() => {
@@ -62,7 +78,8 @@ export const Dashboard = () => {
                         flavor: "standard.2core-16ram", image: "debian-9-x86_64_bioconductor",
                         key_name: keyPairs[0].name, servername: 'Bioconductor', network_id: selectTestNetwork(), metadata: metaData
                     };
-                    await postInstance(instanceData);
+
+                    // await postInstance(instanceData);
                     await reloadData();
                 }}>
                     Test bioconductor
@@ -79,7 +96,7 @@ export const Dashboard = () => {
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
                     <Typography variant='h3'> Instances </Typography>
                 </Box>
-                <InstancesTable instances={instances} reloadData={reloadData} networks={networks}/>
+                <InstancesTable instances={instances} reloadData={reloadData} networks={networks} />
             </Container>
         </div >
     )
