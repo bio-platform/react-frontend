@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             mgr.signinRedirect();
         }
     }
-
+    
     return (
         <AuthContext.Provider
             value={{

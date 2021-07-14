@@ -65,6 +65,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                                 <TableCell align="left">{instance.flavor.vcpus}</TableCell>
                                 <TableCell align="left">{Math.floor(instance.flavor.ram / 1024)} GB</TableCell>
                                 <TableCell align="center">
+                                    <Typography>{instance.status}</Typography>
                                     <DeleteInstanceButton instance={instance} reloadData={reloadData} />
                                     <Button onClick={() => {
                                         addFloatingIP({ network_id: selectTestNetwork(), instance_id: instance.id });

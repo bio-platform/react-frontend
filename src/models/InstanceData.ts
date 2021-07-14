@@ -1,11 +1,8 @@
 export interface InstanceData {
-    flavor: string;
-    image: string;
-    key_name: string;
-    servername: string;
-    network_id: string ;
-    metadata:{
-        Bioclass_user:string;
-        Bioclass_email:string; 
-    }
+    ssh: undefined | string,
+    floating_ip : undefined | string,
+    local_network_id : undefined | string,
+    user_name : undefined | string,
+    user_email: undefined | string,
+    variables: Map<string, (string | number)>,
 }
