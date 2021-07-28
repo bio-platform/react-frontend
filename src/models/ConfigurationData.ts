@@ -1,14 +1,14 @@
 export interface ConfigurationData {
     name: string, // name of the machine
-    tags: [string], // tags of usecases
-    api: [string], // posible values ssh, floatingip, ...
-    textValues: undefined | [string], // names of variables for string values
-    numberValues: undefined | [string], // names of variables for numbered values
-    options: [{
+    tags: string[], // tags of usecases
+    api: string[], // posible values ssh, floatingip, ...
+    textValues: undefined | string[], // names of variables for string values
+    numberValues: undefined | string[], // names of variables for numbered values
+    options: {
         name: string, // for example "flavor". name required for the api call
         default: string, // string with default value
-        options: [string], // string with all posible values
-    }]
+        options: string[], // string with all posible values
+    }[]
 
     // name: string, // name of the machine
     // tags: [string], // usecase tags
