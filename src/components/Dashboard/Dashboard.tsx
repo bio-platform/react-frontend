@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Container, Typography, Box, Divider, Button } from "@material-ui/core"
+import { Container, Typography, Box, Divider, Button, IconButton, LinearProgress } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { CreateButtons } from "./CreateButtons";
@@ -15,6 +15,7 @@ import { KeyPair } from "../../models/KeyPair";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { InstanceData } from "../../models/InstanceData";
 import { FloatingIPData } from "../../models/FloatingIPData";
+import RefreshIcon from '@material-ui/icons/Refresh';
 
 export const Dashboard = () => {
     const [limit, setLimit] = useState<Limit | undefined>(undefined);
@@ -24,6 +25,7 @@ export const Dashboard = () => {
     const [keyPairs, setKeyPairs] = useState<KeyPair[]>([])
     const [floatingIPData, setFloatingIPData] = useState<FloatingIPData[]>([])
     const [loading, setLoading] = useState(true);
+    const [minorLoading, setMinorLoading] = useState(false);
     const context = useContext<AuthContextType>(AuthContext);
 
     const selectTestNetwork = () => {
@@ -45,6 +47,7 @@ export const Dashboard = () => {
             setConfigurationData(responses[4]);
             setFloatingIPData(responses[5]);
             setLoading(false);
+            setMinorLoading(false);
         } catch (err) {
             if (err.response.status === 401) {
                 // todo check errors for not autenticated user
@@ -54,6 +57,13 @@ export const Dashboard = () => {
                 throw err;
             }
         }
+    }
+
+    const reloadDataWithDelay = async () => {
+        setMinorLoading(true);
+        setTimeout(() => {
+            reloadData();
+        }, 5000);
     }
 
     useEffect(() => {
@@ -111,7 +121,7 @@ export const Dashboard = () => {
 
 
                         await postInstance(data.name, configuration);
-                        await reloadData();
+                        await reloadDataWithDelay();
                     }}>{data.name}</Button>)
                 }
                 <Button onClick={async () => {
@@ -136,9 +146,17 @@ export const Dashboard = () => {
                 </Box>
                 <Limits limit={limit} />
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
-                    <Typography variant='h3'> Instances </Typography>
+                    <Typography variant='h3'> Instances
+                            <IconButton onClick={async () => {
+                                    setMinorLoading(true);
+                                    reloadData();
+                                }}>
+                            <RefreshIcon />
+                        </IconButton>
+                    </Typography>
+                    {minorLoading && <LinearProgress />}
                 </Box>
-                <InstancesTable instances={instances} reloadData={reloadData} networks={networks} />
+                <InstancesTable instances={instances} reloadData={reloadDataWithDelay} networks={networks} />
             </Container>
         </div >
     )
