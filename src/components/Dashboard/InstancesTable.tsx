@@ -49,6 +49,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                     <TableHead>
                         <TableRow className={classes.tableRow}>
                             <TableCell>Instance name</TableCell>
+                            <TableCell align="left">Status</TableCell>
                             <TableCell align="left">Floating IP</TableCell>
                             <TableCell align="left">Cores</TableCell>
                             <TableCell align="left">RAM</TableCell>
@@ -61,15 +62,17 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                                 <TableCell component="th" scope="row">
                                     {instance.name}
                                 </TableCell>
+                                <TableCell align="left">{instance.status}</TableCell>
+                                {/* todo floating ip is not showed */}
                                 <TableCell align="left">{instance.access_ipv4 === "" ? "None" : instance.access_ipv4}</TableCell>
                                 <TableCell align="left">{instance.flavor.vcpus}</TableCell>
                                 <TableCell align="left">{Math.floor(instance.flavor.ram / 1024)} GB</TableCell>
                                 <TableCell align="center">
-                                    <Typography>{instance.status}</Typography>
                                     <DeleteInstanceButton instance={instance} reloadData={reloadData} />
-                                    <Button onClick={() => {
+                                    <Button variant="outlined" onClick={() => {
                                         addFloatingIP({ network_id: selectTestNetwork(), instance_id: instance.id });
                                     }}>Alocate IP</Button>
+                                    {/* todo infor button with popup */}
                                 </TableCell>
                             </TableRow>
                         ))}
