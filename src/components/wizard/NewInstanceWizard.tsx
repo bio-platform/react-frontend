@@ -192,14 +192,14 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
             case 2:
                 return (<Box mt={4} mb={5} className={classes.step}>
                     <div>
-                    <SSHKeySelector setDefaultKey={setDefaultKey} setSelectedKey={setSelectedKey} selectedKey={instanceData.get("ssh") || undefined} />
+                        <SSHKeySelector setDefaultKey={setDefaultKey} setSelectedKey={setSelectedKey} selectedKey={instanceData.get("ssh") || undefined} />
                     </div>
-                    {/* todo user can upload new one */}
-                    <div><LocalNetworkIdSelector setDefaultNetwork={setDefaultNetwork} setSelectedNetwork={setSelectedNetwork} selectedNetwork={instanceData.get("local_network_id") || undefined}/>
-                        </div>
                     <div>
-                    <FloatingIPSelector setDefaultFloatingIP={setDefaultFloatingIP} setSelectedFloatingIP={setSelectedFloatingIP} selectedFloatingIP={instanceData.get("floating_ip") || undefined}/>
-                        </div>
+                        <LocalNetworkIdSelector setDefaultNetwork={setDefaultNetwork} setSelectedNetwork={setSelectedNetwork} selectedNetwork={instanceData.get("local_network_id") || undefined} />
+                    </div>
+                    <div>
+                        <FloatingIPSelector setDefaultFloatingIP={setDefaultFloatingIP} setSelectedFloatingIP={setSelectedFloatingIP} selectedFloatingIP={instanceData.get("floating_ip") || undefined} />
+                    </div>
 
                 </Box>)
 
