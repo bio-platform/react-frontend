@@ -8,6 +8,8 @@ import { DashboardDrawerList } from "../constants/RoutesConstants";
 import { NewInstanceWizard } from "../components/wizard/NewInstanceWizard";
 import { AuthContextType, AuthContext } from "./AuthProvider";
 import { ChooseProject } from "../components/dashboard/ChooseProject";
+import { InstanceData } from "../models/InstanceData";
+import { ConfigurationData } from "../models/ConfigurationData";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export const DashboardRoutes = () => {
     const classes = useStyles();
     const [open, setOpen] = useState<boolean>(false);
+    const [configuration, setConfiguration] = useState<ConfigurationData | undefined>(undefined);
 
     const context = useContext<AuthContextType>(AuthContext);
 
@@ -55,10 +58,10 @@ export const DashboardRoutes = () => {
             <Switch >
                 <Route path='/dashboard/overview' >
                     <UniversalDrawer open={open} handleDrawerClose={handleDrawerClose} itemList={DashboardDrawerList} />
-                    <Dashboard />
+                    <Dashboard setConfiguration={setConfiguration} />
                 </Route>
-                <Route path='/dashboard/create-new-instance'>
-                    <NewInstanceWizard />
+                <Route exact path="/dashboard/create-new-instance">
+                    <NewInstanceWizard configuration={configuration!} />
                 </Route>
                 <Route path='/dashboard/choose-project' >
                     <ChooseProject />

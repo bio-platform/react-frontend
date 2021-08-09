@@ -16,8 +16,13 @@ import { ConfigurationData } from "../../models/ConfigurationData";
 import { InstanceData } from "../../models/InstanceData";
 import { FloatingIPData } from "../../models/FloatingIPData";
 import RefreshIcon from '@material-ui/icons/Refresh';
+import { useHistory } from "react-router-dom";
 
-export const Dashboard = () => {
+export type DashboardProps = {
+    setConfiguration: (data: ConfigurationData) => void
+}
+
+export const Dashboard = ({ setConfiguration }: DashboardProps) => {
     const [limit, setLimit] = useState<Limit | undefined>(undefined);
     const [instances, setInstances] = useState<Instance[]>([])
     const [configurationData, setConfigurationData] = useState<ConfigurationData[]>([]);
@@ -27,6 +32,7 @@ export const Dashboard = () => {
     const [loading, setLoading] = useState(true);
     const [minorLoading, setMinorLoading] = useState(false);
     const context = useContext<AuthContextType>(AuthContext);
+    const history = useHistory();
 
     const selectTestNetwork = () => {
         for (let network of networks) {
@@ -124,19 +130,14 @@ export const Dashboard = () => {
                         await reloadDataWithDelay();
                     }}>{data.name}</Button>)
                 }
-                <Button onClick={async () => {
-                    const metaData = { Bioclass_user: context?.user?.name!, Bioclass_email: context?.user?.email! };
-                    const instanceData = {
-                        flavor: "standard.2core-16ram", image: "debian-9-x86_64_bioconductor",
-                        key_name: keyPairs[0].name, servername: 'Bioconductor', network_id: selectTestNetwork(), metadata: metaData
-                    };
+                <Box>
+                    {configurationData.map((data) => (<Button key={data.name} onClick={() => {
+                        setConfiguration(data);
+                        history.push("/dashboard/create-new-instance");
+                    }}>{data.name}</Button>)
+                    )}
 
-                    // await postInstance(instanceData);
-                    await reloadData();
-                }}>
-                    Test bioconductor
-                </Button>
-                <CreateButtons />
+                </Box>
                 <Box mt={2} mb={3}>
                     <Typography variant='h2'> Overview </Typography>
                     <Divider />
@@ -148,9 +149,9 @@ export const Dashboard = () => {
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
                     <Typography variant='h3'> Instances
                             <IconButton onClick={async () => {
-                                    setMinorLoading(true);
-                                    reloadData();
-                                }}>
+                            setMinorLoading(true);
+                            reloadData();
+                        }}>
                             <RefreshIcon />
                         </IconButton>
                     </Typography>

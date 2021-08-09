@@ -1,11 +1,15 @@
-import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, CircularProgress, Typography } from "@material-ui/core";
+import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, CircularProgress, Typography, Divider, ThemeProvider, InputLabel, FormControl, Select } from "@material-ui/core";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import React, { useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { createInstanceDummy } from "../../api/InstanceApi";
+import { ConfigurationData } from "../../models/ConfigurationData";
+import { FloatingIPData } from "../../models/FloatingIPData";
+import { KeyPair } from "../../models/KeyPair";
 import { NormalTextField } from "../NormalTextField";
 import { WrongPath } from "../static/WrongPath";
+import { SSHKeySelector } from "./SSHKeySelector";
 
-const steps = ['Upload SSH key', 'Instance info', 'Create', 'Connect']
+const steps = ['Instance information', 'Select options', 'Choose SSH key', 'Build']
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -23,66 +27,151 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+export type NewInstanceWizardProps = {
+    configuration: ConfigurationData;
+}
 
-
-export const NewInstanceWizard = () => {
-    const [instanceName, setInstanceName] = useState("");
-    const [key, setKey] = useState("");
-    const [network, setNetwork] = useState("");
+export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => {
     const [activeStep, setActiveStep] = useState(0);
-    const [instanceId, setInstanceId] = useState(0);
+    const [instanceData, setInstanceData] = useState(new Map<string, string | number>());
+
+    useEffect(() => {
+        // set default values for options and ssh keys
+        configuration.options!.forEach(option => {
+            instanceData.set(option.name, option.default);
+            setInstanceData(new Map(instanceData));
+        });
+    }, [])
 
     const classes = useStyles();
 
-    const createInstance = async () => {
-        await createInstanceDummy();
-        setInstanceId(14);
+    if (!configuration) {
+        return <Box mt={2} mb={2}><WrongPath message="Configuration was not selected." /></Box>
     }
 
-    const disableNext = () => {
+    if (!configuration.textValues) {
+        configuration.textValues = [];
+    }
+    if (!configuration.numberValues) {
+        configuration.numberValues = [];
+    }
+    if (!configuration.options) {
+        configuration.options = [];
+    }
+
+
+
+    const setSelectedKey = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+        instanceData.set("ssh", event.target.value as string);
+        setInstanceData(new Map(instanceData));
+    }
+
+    const setDefaultKey = (keyName: string) => {
+        instanceData.set("ssh", keyName as string);
+        setInstanceData(new Map(instanceData));
+    }
+
+    const activateNext = () => {
         switch (activeStep) {
             case 0:
-                return key === "";
-            case 1:
-                return network === "" || instanceName === "";
-            case 2:
-                return instanceId === 0;
-            default:
+                for (let i = 0; i < configuration.textValues!.length; i++) {
+                    if (!instanceData.has(configuration.textValues![i])) {
+                        return false;
+                    }
+                }
+
+                for (let i = 0; i < configuration.numberValues!.length; i++) {
+                    if (!instanceData.has(configuration.numberValues![i])) {
+                        return false;
+                    }
+                }
                 return true;
+            case 1:
+                for (let i = 0; i < configuration.options!.length; i++) {
+                    if (!instanceData.has(configuration.options![i].name)) {
+                        return false;
+                    }
+                }
+                return true;
+            case 2:
+                return instanceData.has("ssh");
+
+            default:
+                return false;
         }
     }
 
     const renderStep = () => {
+        // todo refactor
         switch (activeStep) {
             case 0:
                 return (
-                    <Box mb={2} className={classes.step}>
+                    <Box mt={2} mb={3} className={classes.step}>
                         <div>
-                            <NormalTextField required id="SSH key" label="SSH key" variant="outlined" value={key} onChange={setKey} />
+                            <Box mt={2} mb={3}>
+                                {
+                                    configuration.textValues!.map(textVal => {
+                                        return (<Box mt={2} key={textVal}><NormalTextField required id={textVal} label={textVal} variant="outlined" value={instanceData.get(textVal) || ""} onChange={(text) => {
+                                            instanceData.set(textVal, text);
+                                            setInstanceData(new Map(instanceData));
+                                        }} /></Box>);
+                                    })
+                                }
+                            </Box>
+                            {configuration.numberValues?.length === 0 && <Divider />}
+                            <Box mt={2} mb={3}>
+                                {
+                                    configuration.numberValues!.map(numVal => {
+                                        return (<Box mt={2} key={numVal}><NormalTextField type="number" required id={numVal} label={numVal} variant="outlined" value={instanceData.get(numVal) || 0} onChange={(val) => {
+                                            instanceData.set(numVal, +val);
+                                            setInstanceData(new Map(instanceData));
+                                        }} /></Box>);
+                                    })
+                                }
+                            </Box>
                         </div>
                     </Box>
                 )
             case 1:
                 return (
-                    <Box mb={2} className={classes.step}>
-                        <div>
-                            <NormalTextField required id="Instance name" label="Instance name" variant="outlined" value={instanceName} onChange={setInstanceName} />
-                        </div>
-                        <div>
-                            <NormalTextField required id="Network" label="Network" variant="outlined" value={network} onChange={setNetwork} />
-                        </div>
+                    <Box mt={2} mb={3} className={classes.step}>
+
+                        <Box mt={2} mb={3}>
+                            {
+                                configuration.options!.map(option => {
+                                    return (<Box mt={2} key={option.name}>
+                                        <FormControl>
+                                            <InputLabel htmlFor={option.name}>{option.name}</InputLabel>
+                                            <Select
+                                                value={instanceData.get(option.name) || option.default}
+                                                onChange={(event) => {
+                                                    instanceData.set(option.name, event.target.value as string);
+                                                    setInstanceData(new Map(instanceData));
+                                                }}
+                                            
+                                                inputProps={{
+                                                    name: option.name,
+                                                    id: option.name,
+                                                }}
+                                            >
+                                                {option.options.map((value) => {
+                                                    return <option key={value} value={value}>{value}</option>
+                                                })}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>);
+                                })
+                            }
+                        </Box>
                     </Box>
                 )
             case 2:
-                return (
-                    <Box mb={2} className={classes.step}>
-                        {instanceId === 0 ? <CircularProgress /> :
-                            <div>
-                                <CheckCircleOutlineIcon color='action' fontSize="large" />
-                                <Typography variant='h6' >Instance created</Typography>
-                            </div>}
-                    </Box>
-                )
+                return (<Box mt={4} mb={5} className={classes.step}>
+
+                    <SSHKeySelector setDefaultKey={setDefaultKey} setSelectedKey={setSelectedKey} selectedKey={instanceData.get("ssh") || undefined} />
+                    {/* todo user can upload new one */}
+
+                </Box>)
             default:
                 return <WrongPath />
         }
@@ -110,12 +199,9 @@ export const NewInstanceWizard = () => {
                             color="primary"
                             size="large"
                             onClick={() => {
-                                if (activeStep === 1) {
-                                    createInstance();
-                                }
                                 setActiveStep(activeStep + 1);
                             }}
-                            disabled={disableNext()}>
+                            disabled={!activateNext()}>
                             Next
                         </Button>
                     }
