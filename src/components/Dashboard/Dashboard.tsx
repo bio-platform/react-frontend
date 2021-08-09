@@ -89,48 +89,9 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
                     <Typography variant='h2'> Create new instance </Typography>
                     <Divider />
                 </Box>
-                {
-                    configurationData.map((data) => <Button key={data.name} onClick={async () => {
-                        let configuration = new Map<string, string | number>();
-                        data.api.forEach(apiKey => {
-                            if (apiKey === "ssh") {
-                                // todo this can be more of them
-                                configuration.set("ssh", keyPairs[0].name);
-                            }
-                            if (apiKey === "floating_ip") {
-                                // todo  this can be more of them
-                                configuration.set("floating_ip", floatingIPData[0].name);
-                            }
-                            if (apiKey === "local_network_id") {
-                                // todo  this can be more of them
-                                configuration.set("local_network_id", selectTestNetwork());
-                            }
-                        })
-
-                        // todo this is on user 
-                        if (data.textValues) {
-                            data.textValues.forEach(textVal => {
-                                configuration.set(textVal, "empty test");
-                            });
-                        }
-                        // todo this is on user 
-                        if (data.numberValues) {
-                            data.numberValues.forEach(numVal => {
-                                configuration.set(numVal, 3);
-                            });
-                        }
-
-                        data.options.forEach(opt => {
-                            // todo this should be dropdown 
-                            configuration.set(opt.name, opt.options[0]);
-                        });
-
-
-                        await postInstance(data.name, configuration);
-                        await reloadDataWithDelay();
-                    }}>{data.name}</Button>)
-                }
+                
                 <Box>
+                    {/* todo tabs */}
                     {configurationData.map((data) => (<Button key={data.name} onClick={() => {
                         setConfiguration(data);
                         history.push("/dashboard/create-new-instance");
