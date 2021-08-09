@@ -24,7 +24,7 @@ export const SSHKeySelector = ({ selectedKey, setDefaultKey, setSelectedKey }: S
     }, [])
 
     if (loading) {
-        return <LoadingPage />
+        return <LoadingPage size={20}/>
     }
 
     return (<>

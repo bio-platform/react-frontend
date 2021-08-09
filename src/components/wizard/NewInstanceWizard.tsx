@@ -1,12 +1,14 @@
 import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, CircularProgress, Typography, Divider, ThemeProvider, InputLabel, FormControl, Select } from "@material-ui/core";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { createInstanceDummy } from "../../api/InstanceApi";
+import { createInstanceDummy, postInstance } from "../../api/InstanceApi";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { FloatingIPData } from "../../models/FloatingIPData";
 import { KeyPair } from "../../models/KeyPair";
 import { NormalTextField } from "../NormalTextField";
 import { WrongPath } from "../static/WrongPath";
+import { FloatingIPSelector } from "./FloatingIPSelector";
+import { LocalNetworkIdSelector } from "./LocalNetworkIdSelector";
 import { SSHKeySelector } from "./SSHKeySelector";
 
 const steps = ['Instance information', 'Select options', 'Choose SSH key', 'Build']
@@ -34,6 +36,7 @@ export type NewInstanceWizardProps = {
 export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => {
     const [activeStep, setActiveStep] = useState(0);
     const [instanceData, setInstanceData] = useState(new Map<string, string | number>());
+    const [creating, setCreating] = useState(false);
 
     useEffect(() => {
         // set default values for options and ssh keys
@@ -71,6 +74,27 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
         setInstanceData(new Map(instanceData));
     }
 
+    const setSelectedNetwork = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+        instanceData.set("local_network_id", event.target.value as string);
+        setInstanceData(new Map(instanceData));
+    }
+
+    const setDefaultNetwork = (network: string) => {
+        instanceData.set("local_network_id", network as string);
+        setInstanceData(new Map(instanceData));
+    }
+
+    const setSelectedFloatingIP = (event: ChangeEvent<{ name?: string | undefined; value: unknown; }>) => {
+        instanceData.set("floating_ip", event.target.value as string);
+        setInstanceData(new Map(instanceData));
+    }
+
+    const setDefaultFloatingIP = (floatingIP: string) => {
+        instanceData.set("floating_ip", floatingIP as string);
+        setInstanceData(new Map(instanceData));
+    }
+
+
     const activateNext = () => {
         switch (activeStep) {
             case 0:
@@ -94,7 +118,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                 }
                 return true;
             case 2:
-                return instanceData.has("ssh");
+                return instanceData.has("ssh") && instanceData.has("floating_ip") && instanceData.has("local_network_id");
 
             default:
                 return false;
@@ -148,7 +172,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                                     instanceData.set(option.name, event.target.value as string);
                                                     setInstanceData(new Map(instanceData));
                                                 }}
-                                            
+
                                                 inputProps={{
                                                     name: option.name,
                                                     id: option.name,
@@ -167,11 +191,24 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                 )
             case 2:
                 return (<Box mt={4} mb={5} className={classes.step}>
-
+                    <div>
                     <SSHKeySelector setDefaultKey={setDefaultKey} setSelectedKey={setSelectedKey} selectedKey={instanceData.get("ssh") || undefined} />
+                    </div>
                     {/* todo user can upload new one */}
+                    <div><LocalNetworkIdSelector setDefaultNetwork={setDefaultNetwork} setSelectedNetwork={setSelectedNetwork} selectedNetwork={instanceData.get("local_network_id") || undefined}/>
+                        </div>
+                    <div>
+                    <FloatingIPSelector setDefaultFloatingIP={setDefaultFloatingIP} setSelectedFloatingIP={setSelectedFloatingIP} selectedFloatingIP={instanceData.get("floating_ip") || undefined}/>
+                        </div>
 
                 </Box>)
+
+            case 3:
+                return (<Box mt={4} mb={5} className={classes.step}>
+                    <div><Typography variant="h4">Building.</Typography></div>
+                    <div><Typography>Your instance is being created. Information about progress is on the dashboard.</Typography></div>
+                    <div><Button href="/dashboard" variant="contained" color="primary">Go to Dashboard</Button></div>
+                </Box>);
             default:
                 return <WrongPath />
         }
@@ -186,7 +223,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                     alignItems="center"
                     container
                     className={classes.buttons}>
-                    {(activeStep !== 0 && activeStep < steps.length) &&
+                    {(activeStep !== 0 && activeStep < steps.length - 1) &&
                         <Button variant="text"
                             color="inherit"
                             size="large"
@@ -194,15 +231,21 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                             Previous
                     </Button>
                     }
-                    {activeStep < steps.length &&
+                    {activeStep < steps.length - 1 &&
                         <Button variant="contained"
                             color="primary"
                             size="large"
-                            onClick={() => {
+                            onClick={async () => {
+                                // create the instance
+                                if (activeStep === 2) {
+                                    setCreating(true);
+                                    await postInstance(configuration.name, instanceData);
+                                    setCreating(false);
+                                }
                                 setActiveStep(activeStep + 1);
                             }}
-                            disabled={!activateNext()}>
-                            Next
+                            disabled={!activateNext() || creating}>
+                            {activeStep === 2 ? "Build" : "Next"}
                         </Button>
                     }
                 </Grid>
