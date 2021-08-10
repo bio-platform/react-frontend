@@ -12,6 +12,7 @@ export type AuthContextType = {
     setProject: (project: Project | undefined) => void;
     mgr: UserManager;
     login: () => Promise<void>;
+    logout: () => void;
 } | null;
 
 export const AuthContext = createContext<AuthContextType>(null);
@@ -94,6 +95,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             mgr.signinRedirect();
         }
     }
+
+    const logout = () => {
+        sessionStorage.removeItem('userToken');
+        sessionStorage.removeItem('userName');
+        sessionStorage.removeItem('userEmail');
+        sessionStorage.removeItem('projectId');
+        sessionStorage.removeItem('projectName');
+        setProject(undefined);
+        setUser(undefined);
+        mgr.signoutRedirect();
+    }
     
     return (
         <AuthContext.Provider
@@ -104,6 +116,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 setProject: handleSetProject,
                 mgr: mgr,
                 login: login,
+                logout: logout,
             }}>
             {children}
         </AuthContext.Provider>

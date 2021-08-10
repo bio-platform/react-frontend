@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { AppBar, Button, IconButton, makeStyles, createStyles, Theme, Toolbar, Link } from "@material-ui/core"
 import { Menu } from "@material-ui/icons"
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect, useHistory } from "react-router-dom";
 import { Dashboard } from "../components/dashboard/Dashboard";
 import { UniversalDrawer } from "../components/UniversalDrawer";
 import { DashboardDrawerList } from "../constants/RoutesConstants";
@@ -30,6 +30,8 @@ export const DashboardRoutes = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [configuration, setConfiguration] = useState<ConfigurationData | undefined>(undefined);
 
+    const history = useHistory();
+
     const context = useContext<AuthContextType>(AuthContext);
 
     const handleDrawerOpen = () => {
@@ -52,7 +54,10 @@ export const DashboardRoutes = () => {
                             Dashboard
                         </Link>
                     </div>
-                    <Button color="inherit" href="/signin">Log out</Button>
+                    <Button color="inherit" onClick={() => {
+                        context?.logout();
+                        history.push("/auth/signin");
+                    }}>Log out</Button>
                 </Toolbar>
             </AppBar>
             <Switch >
