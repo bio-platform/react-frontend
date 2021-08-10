@@ -30,7 +30,7 @@ export const SSHKeySelector = ({ selectedKey, setDefaultKey, setSelectedKey }: S
     return (<>
     <Typography>Select ssh key</Typography>
         {keyPairs!.length > 0 && (<FormControl>
-            <InputLabel htmlFor="ssh-key">SSH Key</InputLabel>
+            {/* <InputLabel htmlFor="ssh-key">SSH Key</InputLabel> */}
             <Select
                 value={selectedKey || keyPairs![0].name}
                 onChange={setSelectedKey}

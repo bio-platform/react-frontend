@@ -60,7 +60,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                         {instances.map((instance) => (
                             <TableRow className={classes.tableRow} key={instance.id}>
                                 <TableCell component="th" scope="row">
-                                    {instance.name}
+                                    {instance.name + "  ---  " + instance.id}
                                 </TableCell>
                                 <TableCell align="left">{instance.status}</TableCell>
                                 {/* todo floating ip is not showed */}
