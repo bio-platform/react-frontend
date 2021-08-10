@@ -1,10 +1,11 @@
 import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, CircularProgress, Typography, Divider, ThemeProvider, InputLabel, FormControl, Select } from "@material-ui/core";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { createInstanceDummy, postInstance } from "../../api/InstanceApi";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { FloatingIPData } from "../../models/FloatingIPData";
 import { KeyPair } from "../../models/KeyPair";
+import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { NormalTextField } from "../NormalTextField";
 import { WrongPath } from "../static/WrongPath";
 import { FloatingIPSelector } from "./FloatingIPSelector";
@@ -37,6 +38,8 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
     const [activeStep, setActiveStep] = useState(0);
     const [instanceData, setInstanceData] = useState(new Map<string, string | number>());
     const [creating, setCreating] = useState(false);
+
+    const context = useContext<AuthContextType>(AuthContext);
 
     useEffect(() => {
         // set default values for options and ssh keys
@@ -239,6 +242,8 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                 // create the instance
                                 if (activeStep === 2) {
                                     setCreating(true);
+                                    instanceData.set("user_name", context!.user!.name);
+                                    instanceData.set("user_email", context!.user!.email);
                                     await postInstance(configuration.name, instanceData);
                                     setCreating(false);
                                 }

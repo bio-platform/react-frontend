@@ -51,7 +51,7 @@ export const postInstance = async (name: string, instanceData: Map<string, strin
   const input_variables = Object.fromEntries(instanceData);
   const fullMap = new Map<string, any>().set("name", name).set("input_variables", input_variables);
   const request = Object.fromEntries(fullMap);
-  
+
   const response = await axios.post(API_URL + 'instancesv2/', request, {
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const getFloatingIps = async () => {
   return response.data as FloatingIPData[];
 }
 
-export const addFloatingIP = async (floating_ip : FloatingIP) => {
+export const addFloatingIP = async (floating_ip: FloatingIP) => {
   const response = await axios.post(API_URL + 'floating_ips/', floating_ip, {
     headers: {
       "Content-Type": "application/json",
