@@ -20,11 +20,22 @@ export const ChooseProject = () => {
         if (context?.project) {
             history.push('/dashboard/overview');
         } else {
-            (async () => {
-                const loadedProjects = await getProjects();
-                setProjects(loadedProjects);
-                setLoading(false);
-            })();
+            try {
+                (async () => {
+                    const loadedProjects = await getProjects();
+                    setProjects(loadedProjects);
+                    setLoading(false);
+                })();
+            } catch (err) {
+                if (err.response.status === 401) {
+                    // todo check errors for not autenticated user
+                    console.log("Session expired");
+                    context?.logout();
+                }
+                else {
+                    throw err;
+                }
+            }
         }
     }, [context, history])
 
@@ -74,9 +85,20 @@ export const ChooseProject = () => {
                             color="primary"
                             disabled={selectedProject === undefined}
                             onClick={async () => {
-                                await putProject(selectedProject!);
-                                context?.setProject(selectedProject!);
-                                history.push('/dashboard/overview');
+                                try {
+                                    await putProject(selectedProject!);
+                                    context?.setProject(selectedProject!);
+                                    history.push('/dashboard/overview');
+                                } catch (err) {
+                                    if (err.response.status === 401) {
+                                        // todo check errors for not autenticated user
+                                        console.log("Session expired");
+                                        context?.logout();
+                                    }
+                                    else {
+                                        throw err;
+                                    }
+                                }
                             }}
                         >
 

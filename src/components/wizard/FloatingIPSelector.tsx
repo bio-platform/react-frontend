@@ -1,7 +1,8 @@
 import { FormControl, InputLabel, Select, Typography } from "@material-ui/core";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { getFloatingIps } from "../../api/InstanceApi";
 import { FloatingIPData } from "../../models/FloatingIPData";
+import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { LoadingPage } from "../static/LoadingPage";
 
 export type FloatingIPSelectorProps = {
@@ -14,17 +15,30 @@ export const FloatingIPSelector = ({ selectedFloatingIP, setDefaultFloatingIP, s
     const [floatingIPs, setFloatingIPs] = useState<FloatingIPData[] | undefined>([])
     const [loading, setLoading] = useState(true);
 
+    const context = useContext<AuthContextType>(AuthContext)
+
     useEffect(() => {
-        (async () => {
-            const response = await getFloatingIps();
-            setFloatingIPs(response);
-            setDefaultFloatingIP(response[0].name);
-            setLoading(false);
-        })();
-    }, [])
+        try {
+            (async () => {
+                const response = await getFloatingIps();
+                setFloatingIPs(response);
+                setDefaultFloatingIP(response[0].name);
+                setLoading(false);
+            })();
+        } catch (err) {
+            if (err.response.status === 401) {
+                // todo check errors for not autenticated user
+                console.log("Session expired");
+                context?.logout();
+            }
+            else {
+                throw err;
+            }
+        }
+    }, []);
 
     if (loading) {
-        return <LoadingPage size={20}/>
+        return <LoadingPage size={20} />
     }
 
     return (<>

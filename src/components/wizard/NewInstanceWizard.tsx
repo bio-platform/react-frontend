@@ -241,11 +241,22 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                             onClick={async () => {
                                 // create the instance
                                 if (activeStep === 2) {
-                                    setCreating(true);
-                                    instanceData.set("user_name", context!.user!.name);
-                                    instanceData.set("user_email", context!.user!.email);
-                                    await postInstance(configuration.name, instanceData);
-                                    setCreating(false);
+                                    try {
+                                        setCreating(true);
+                                        instanceData.set("user_name", context!.user!.name);
+                                        instanceData.set("user_email", context!.user!.email);
+                                        await postInstance(configuration.name, instanceData);
+                                        setCreating(false);
+                                    } catch (err) {
+                                        if (err.response.status === 401) {
+                                            // todo check errors for not autenticated user
+                                            console.log("Session expired");
+                                            context?.logout();
+                                        }
+                                        else {
+                                            throw err;
+                                        }
+                                    }
                                 }
                                 setActiveStep(activeStep + 1);
                             }}

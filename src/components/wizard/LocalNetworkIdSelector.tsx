@@ -1,7 +1,8 @@
 import { FormControl, InputLabel, Select, Typography } from "@material-ui/core";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { getNetworks } from "../../api/UserApi";
 import { Network } from "../../models/Network";
+import { AuthContext } from "../../routes/AuthProvider";
 import { LoadingPage } from "../static/LoadingPage";
 
 export type LocalNetworkIdSelectorProps = {
@@ -14,13 +15,26 @@ export const LocalNetworkIdSelector = ({ selectedNetwork, setDefaultNetwork, set
     const [networks, setNetworks] = useState<Network[] | undefined>([])
     const [loading, setLoading] = useState(true);
 
+    const context = useContext(AuthContext);
+
     useEffect(() => {
+        try{
         (async () => {
             const response = await getNetworks();
             setNetworks(response);
             setDefaultNetwork(response[0].id);
             setLoading(false);
         })();
+    } catch (err) {
+        if (err.response.status === 401) {
+            // todo check errors for not autenticated user
+            console.log("Session expired");
+            context?.logout();
+        }
+        else {
+            throw err;
+        }
+    }
     }, [])
 
     if (loading) {

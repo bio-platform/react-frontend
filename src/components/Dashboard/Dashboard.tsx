@@ -34,15 +34,6 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
     const context = useContext<AuthContextType>(AuthContext);
     const history = useHistory();
 
-    const selectTestNetwork = () => {
-        for (let network of networks) {
-            if (network.name === "78-128-250-pers-proj-net") {
-                return network.id;
-            }
-        }
-        return '';
-    }
-
     const reloadData = async () => {
         try {
             const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys(), getConfigurations(), getFloatingIps()]);
@@ -57,7 +48,8 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
         } catch (err) {
             if (err.response.status === 401) {
                 // todo check errors for not autenticated user
-                console.log("error 401");
+                console.log("Session expired");
+                context?.logout();
             }
             else {
                 throw err;
