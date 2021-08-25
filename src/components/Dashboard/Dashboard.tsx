@@ -5,14 +5,12 @@ import { Limits } from "./Limits";
 import { DashboardDrawerList } from "../../constants/RoutesConstants";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { Limit } from "../../models/Limit";
-import { getKeys, getLimits, getNetworks } from "../../api/UserApi";
+import { getLimits, getNetworks } from "../../api/UserApi";
 import { LoadingPage } from "../static/LoadingPage";
-import { getConfigurations, getFloatingIps, getInstances } from "../../api/InstanceApi";
+import { getConfigurations, getInstances } from "../../api/InstanceApi";
 import { Instance } from "../../models/Instance";
 import { Network } from "../../models/Network";
-import { KeyPair } from "../../models/KeyPair";
 import { ConfigurationData } from "../../models/ConfigurationData";
-import { FloatingIPData } from "../../models/FloatingIPData";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { useHistory } from "react-router-dom";
 
