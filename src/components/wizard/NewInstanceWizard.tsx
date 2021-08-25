@@ -1,10 +1,7 @@
-import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, CircularProgress, Typography, Divider, ThemeProvider, InputLabel, FormControl, Select } from "@material-ui/core";
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, Typography, Divider, InputLabel, FormControl, Select } from "@material-ui/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
-import { createInstanceDummy, postInstance } from "../../api/InstanceApi";
+import { postInstance } from "../../api/InstanceApi";
 import { ConfigurationData } from "../../models/ConfigurationData";
-import { FloatingIPData } from "../../models/FloatingIPData";
-import { KeyPair } from "../../models/KeyPair";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { NormalTextField } from "../NormalTextField";
 import { WrongPath } from "../static/WrongPath";
@@ -47,7 +44,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
             instanceData.set(option.name, option.default);
             setInstanceData(new Map(instanceData));
         });
-    }, [])
+    }, [configuration.options])
 
     const classes = useStyles();
 
@@ -249,7 +246,6 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                         setCreating(false);
                                     } catch (err) {
                                         if (err.response.status === 401) {
-                                            // todo check errors for not autenticated user
                                             console.log("Session expired");
                                             context?.logout();
                                         }

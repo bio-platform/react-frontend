@@ -28,7 +28,6 @@ export const ChooseProject = () => {
                 })();
             } catch (err) {
                 if (err.response.status === 401) {
-                    // todo check errors for not autenticated user
                     console.log("Session expired");
                     context?.logout();
                 }
@@ -91,7 +90,6 @@ export const ChooseProject = () => {
                                     history.push('/dashboard/overview');
                                 } catch (err) {
                                     if (err.response.status === 401) {
-                                        // todo check errors for not autenticated user
                                         console.log("Session expired");
                                         context?.logout();
                                     }

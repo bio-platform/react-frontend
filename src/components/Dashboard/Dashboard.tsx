@@ -2,18 +2,16 @@ import React, { useContext, useEffect, useState } from "react"
 import { Container, Typography, Box, Divider, Button, IconButton, LinearProgress } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
-import { CreateButtons } from "./CreateButtons";
 import { DashboardDrawerList } from "../../constants/RoutesConstants";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { Limit } from "../../models/Limit";
 import { getKeys, getLimits, getNetworks } from "../../api/UserApi";
 import { LoadingPage } from "../static/LoadingPage";
-import { getConfigurations, getFloatingIps, getInstances, postInstance } from "../../api/InstanceApi";
+import { getConfigurations, getFloatingIps, getInstances } from "../../api/InstanceApi";
 import { Instance } from "../../models/Instance";
 import { Network } from "../../models/Network";
 import { KeyPair } from "../../models/KeyPair";
 import { ConfigurationData } from "../../models/ConfigurationData";
-import { InstanceData } from "../../models/InstanceData";
 import { FloatingIPData } from "../../models/FloatingIPData";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { useHistory } from "react-router-dom";
@@ -27,8 +25,6 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
     const [instances, setInstances] = useState<Instance[]>([])
     const [configurationData, setConfigurationData] = useState<ConfigurationData[]>([]);
     const [networks, setNetworks] = useState<Network[]>([]);
-    const [keyPairs, setKeyPairs] = useState<KeyPair[]>([])
-    const [floatingIPData, setFloatingIPData] = useState<FloatingIPData[]>([])
     const [loading, setLoading] = useState(true);
     const [minorLoading, setMinorLoading] = useState(false);
     const context = useContext<AuthContextType>(AuthContext);
@@ -36,18 +32,15 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
 
     const reloadData = async () => {
         try {
-            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getKeys(), getConfigurations(), getFloatingIps()]);
+            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getConfigurations()]);
             setLimit(responses[0]);
             setInstances(responses[1]);
             setNetworks(responses[2]);
-            setKeyPairs(responses[3]);
-            setConfigurationData(responses[4]);
-            setFloatingIPData(responses[5]);
+            setConfigurationData(responses[3]);
             setLoading(false);
             setMinorLoading(false);
         } catch (err) {
             if (err.response.status === 401) {
-                // todo check errors for not autenticated user
                 console.log("Session expired");
                 context?.logout();
             }

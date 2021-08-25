@@ -28,7 +28,7 @@ export const getProjects = async () => {
 }
 
 export const putProject = async (project: Project) => {
-    const response = await axios.put(API_URL, { project_id: project.id }, {
+    await axios.put(API_URL, { project_id: project.id }, {
         headers: {
             "Content-Type": "application/json",
         },

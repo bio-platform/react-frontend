@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography, Box, Button } from '@material-ui/core';
 import { Instance } from '../../models/Instance';
 import { DeleteInstanceButton } from '../static/CustomButtons';
 import { addFloatingIP } from '../../api/InstanceApi';
-import { AuthContextType, AuthContext } from '../../routes/AuthProvider';
 import { Network } from '../../models/Network';
 
 const useStyles = makeStyles({
@@ -25,7 +24,6 @@ type Props = {
 
 export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
     const classes = useStyles();
-    const context = useContext<AuthContextType>(AuthContext);
 
     const selectTestNetwork = () => {
         if (networks) {

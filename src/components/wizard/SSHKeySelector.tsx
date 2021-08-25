@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select, Typography } from "@material-ui/core";
+import { FormControl, Select, Typography } from "@material-ui/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { getKeys } from "../../api/UserApi";
 import { KeyPair } from "../../models/KeyPair";
@@ -19,30 +19,29 @@ export const SSHKeySelector = ({ selectedKey, setDefaultKey, setSelectedKey }: S
 
     useEffect(() => {
         try {
-        (async () => {
-            const response = await getKeys();
-            setKeyPairs(response);
-            setDefaultKey(response[0].name);
-            setLoading(false);
-        })();
-    } catch (err) {
-        if (err.response.status === 401) {
-            // todo check errors for not autenticated user
-            console.log("Session expired");
-            context?.logout();
+            (async () => {
+                const response = await getKeys();
+                setKeyPairs(response);
+                setDefaultKey(response[0].name);
+                setLoading(false);
+            })();
+        } catch (err) {
+            if (err.response.status === 401) {
+                console.log("Session expired");
+                context?.logout();
+            }
+            else {
+                throw err;
+            }
         }
-        else {
-            throw err;
-        }
-    }
-    }, [])
+    }, [context])
 
     if (loading) {
-        return <LoadingPage size={20}/>
+        return <LoadingPage size={20} />
     }
 
     return (<>
-    <Typography>Select ssh key</Typography>
+        <Typography>Select ssh key</Typography>
         {keyPairs!.length > 0 && (<FormControl>
             {/* <InputLabel htmlFor="ssh-key">SSH Key</InputLabel> */}
             <Select

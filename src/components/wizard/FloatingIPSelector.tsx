@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select, Typography } from "@material-ui/core";
+import { FormControl, InputLabel, Select } from "@material-ui/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { getFloatingIps } from "../../api/InstanceApi";
 import { FloatingIPData } from "../../models/FloatingIPData";
@@ -27,7 +27,6 @@ export const FloatingIPSelector = ({ selectedFloatingIP, setDefaultFloatingIP, s
             })();
         } catch (err) {
             if (err.response.status === 401) {
-                // todo check errors for not autenticated user
                 console.log("Session expired");
                 context?.logout();
             }
@@ -35,7 +34,7 @@ export const FloatingIPSelector = ({ selectedFloatingIP, setDefaultFloatingIP, s
                 throw err;
             }
         }
-    }, []);
+    }, [context]);
 
     if (loading) {
         return <LoadingPage size={20} />

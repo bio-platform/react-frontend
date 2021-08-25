@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select, Typography } from "@material-ui/core";
+import { FormControl, InputLabel, Select } from "@material-ui/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { getNetworks } from "../../api/UserApi";
 import { Network } from "../../models/Network";
@@ -27,7 +27,6 @@ export const LocalNetworkIdSelector = ({ selectedNetwork, setDefaultNetwork, set
         })();
     } catch (err) {
         if (err.response.status === 401) {
-            // todo check errors for not autenticated user
             console.log("Session expired");
             context?.logout();
         }
@@ -35,7 +34,7 @@ export const LocalNetworkIdSelector = ({ selectedNetwork, setDefaultNetwork, set
             throw err;
         }
     }
-    }, [])
+    }, [context])
 
     if (loading) {
         return <LoadingPage size={20}/>

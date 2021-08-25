@@ -1,18 +1,9 @@
 import { FloatingIPData } from './../models/FloatingIPData';
 import { ConfigurationData } from './../models/ConfigurationData';
 import { FloatingIP } from './../models/FloatingIP';
-import { InstanceData } from './../models/InstanceData';
 import { Instance } from './../models/Instance';
 import axios from "axios";
 import { API_URL } from "../constants/Environment";
-
-export const createInstanceDummy = async () => {
-  const promise = new Promise(resolve => {
-    setTimeout(() => { resolve(true) }, 2000);
-  });
-  await promise;
-  return "done";
-}
 
 export const getInstances = async () => {
   const response = await axios.get(API_URL + "instances/", {
@@ -58,6 +49,8 @@ export const postInstance = async (name: string, instanceData: Map<string, strin
     },
     withCredentials: true,
   });
+
+  return response.data.id;
 }
 
 export const getFloatingIps = async () => {
@@ -72,7 +65,7 @@ export const getFloatingIps = async () => {
 }
 
 export const addFloatingIP = async (floating_ip: FloatingIP) => {
-  const response = await axios.post(API_URL + 'floating_ips/', floating_ip, {
+  await axios.post(API_URL + 'floating_ips/', floating_ip, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -81,7 +74,7 @@ export const addFloatingIP = async (floating_ip: FloatingIP) => {
 }
 
 export const postKeyPair = async (name: string) => {
-  const response = await axios.post(API_URL + 'keypairs/', { keyname: name }, {
+  await axios.post(API_URL + 'keypairs/', { keyname: name }, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -90,7 +83,7 @@ export const postKeyPair = async (name: string) => {
 }
 
 export const deleteInstance = async (instance: Instance) => {
-  const response = await axios.delete(API_URL + 'instances/' + instance.id + '/', {
+  await axios.delete(API_URL + 'instances/' + instance.id + '/', {
     headers: {
       "Content-Type": "application/json",
     },

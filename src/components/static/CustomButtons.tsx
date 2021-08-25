@@ -35,7 +35,6 @@ export const DeleteInstanceButton = (props: DeleteInstanceButtonProps) => {
                     await props.reloadData();
                 } catch (err) {
                     if (err.response.status === 401) {
-                        // todo check errors for not autenticated user
                         console.log("Session expired");
                         context?.logout();
                     }

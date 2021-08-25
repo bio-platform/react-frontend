@@ -8,7 +8,6 @@ import { DashboardDrawerList } from "../constants/RoutesConstants";
 import { NewInstanceWizard } from "../components/wizard/NewInstanceWizard";
 import { AuthContextType, AuthContext } from "./AuthProvider";
 import { ChooseProject } from "../components/dashboard/ChooseProject";
-import { InstanceData } from "../models/InstanceData";
 import { ConfigurationData } from "../models/ConfigurationData";
 
 const useStyles = makeStyles((theme: Theme) =>
