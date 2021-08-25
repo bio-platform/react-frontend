@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography, Box, Button } from '@material-ui/core';
 import { Instance } from '../../models/Instance';
 import { DeleteInstanceButton } from '../static/CustomButtons';
-import { addFloatingIP } from '../../api/InstanceApi';
+import { addFloatingIP, getInstructions } from '../../api/InstanceApi';
 import { Network } from '../../models/Network';
+import { Instructions } from '../../models/Instructions';
+import { LoadingPage } from '../static/LoadingPage';
+import { InfoPopup } from '../static/InfoPopup';
 
 const useStyles = makeStyles({
     table: {
@@ -24,6 +27,32 @@ type Props = {
 
 export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [instructions, setInstructions] = useState(new Map<string, Instructions>());
+    
+    useEffect(() => {
+        (async () => {
+            setLoading(true);
+            if (instances === undefined) {
+                setLoading(false);
+                return;
+            }
+            const responses = await Promise.all(instances!.map(instance => {return getInstructions(instance)}));
+            for (let i = 0; i < responses.length; i++) {
+                instructions.set(instances![i].id, responses[i]);
+            }
+            setInstructions(new Map<string, Instructions>(instructions));
+            setLoading(false);
+        })();
+    }, [instances])
+
+    if (instances === undefined) {
+        return (<Typography>Cannot load instances</Typography>)
+    }
+
+    if (loading) {
+        return <LoadingPage size={50}/>;
+    }
 
     const selectTestNetwork = () => {
         if (networks) {
@@ -36,10 +65,6 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
         return '';
     }
 
-    if (instances === undefined) {
-        return (<Typography>Cannot load instances</Typography>)
-    }
-
     return (
         <Box mb={6}>
             <TableContainer component={Paper}>
@@ -48,7 +73,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                         <TableRow className={classes.tableRow}>
                             <TableCell>Instance name</TableCell>
                             <TableCell align="left">Status</TableCell>
-                            {/* <TableCell align="left">Floating IP</TableCell> */}
+                            <TableCell align="left">Floating IP</TableCell>
                             <TableCell align="left">Cores</TableCell>
                             <TableCell align="left">RAM</TableCell>
                             <TableCell align="center">Action</TableCell>
@@ -61,16 +86,15 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                                     {instance.name + "  ---  " + instance.id}
                                 </TableCell>
                                 <TableCell align="left">{instance.status}</TableCell>
-                                {/* todo floating ip is not showed */}
-                                {/* <TableCell align="left">{instance.access_ipv4 === "" ? "None" : instance.access_ipv4}</TableCell> */}
+                                <TableCell align="left">{instructions.get(instance.id)?.floating_ip !== null ? instructions.get(instance.id)?.floating_ip : "Allocate ip todo"}</TableCell>
                                 <TableCell align="left">{instance.flavor.vcpus}</TableCell>
                                 <TableCell align="left">{Math.floor(instance.flavor.ram / 1024)} GB</TableCell>
                                 <TableCell align="center">
                                     <DeleteInstanceButton instance={instance} reloadData={reloadData} />
-                                    <Button variant="outlined" onClick={() => {
+                                    {/* <Button variant="outlined" onClick={() => {
                                         addFloatingIP({ network_id: selectTestNetwork(), instance_id: instance.id });
-                                    }}>Alocate IP</Button>
-                                    {/* todo infor button with popup */}
+                                    }}>Alocate IP</Button> */}
+                                    <InfoPopup instruction={instructions.get(instance.id)} />
                                 </TableCell>
                             </TableRow>
                         ))}

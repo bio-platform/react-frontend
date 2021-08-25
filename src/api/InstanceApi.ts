@@ -4,6 +4,7 @@ import { FloatingIP } from './../models/FloatingIP';
 import { Instance } from './../models/Instance';
 import axios from "axios";
 import { API_URL } from "../constants/Environment";
+import { Instructions } from '../models/Instructions';
 
 export const getInstances = async () => {
   const response = await axios.get(API_URL + "instances/", {
@@ -89,4 +90,15 @@ export const deleteInstance = async (instance: Instance) => {
     },
     withCredentials: true,
   });
+}
+
+export const getInstructions = async (instance: Instance) => {
+  const response = await axios.get(API_URL + "instructions/" + instance.id + '/', {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  });
+
+  return response.data as Instructions;
 }
