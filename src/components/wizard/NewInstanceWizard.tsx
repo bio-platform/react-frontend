@@ -1,5 +1,6 @@
 import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, Typography, Divider, InputLabel, FormControl, Select } from "@material-ui/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { postInstance } from "../../api/InstanceApi";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
@@ -39,16 +40,18 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
     const context = useContext<AuthContextType>(AuthContext);
 
     useEffect(() => {
-        // set default values for options and ssh keys
-        configuration.options!.forEach(option => {
-            instanceData.set(option.name, option.default);
-            setInstanceData(new Map(instanceData));
-        });
-    }, [configuration.options])
+        if (configuration) {
+            // set default values for options and ssh keys
+            configuration.options!.forEach(option => {
+                instanceData.set(option.name, option.default);
+                setInstanceData(new Map(instanceData));
+            });
+        }
+    }, [])
 
     const classes = useStyles();
 
-    if (!configuration) {
+    if (configuration === undefined) {
         return <Box mt={2} mb={2}><WrongPath message="Configuration was not selected." /></Box>
     }
 
