@@ -4,6 +4,7 @@ import axios from "axios";
 import { API_URL } from "../constants/Environment";
 import { Limit } from "../models/Limit";
 import { Project } from "../models/Project";
+import { PostKey } from '../models/PostKey';
 
 export const getLimits = async () => {
     const response = await axios.get(API_URL + "limits/", {
@@ -36,8 +37,8 @@ export const putProject = async (project: Project) => {
     });
 }
 
-export const postKey = async (keyPair: KeyPair) => {
-    await axios.post(API_URL + 'keypairs/', keyPair, {
+export const postKey = async (postKey: PostKey) => {
+    await axios.post(API_URL + 'keypairs/', postKey, {
       headers: {
         "Content-Type": "application/json",
       },

@@ -41,9 +41,10 @@ export const FloatingIPSelector = ({ selectedFloatingIP, setDefaultFloatingIP, s
     }
 
     return (<>
-        {floatingIPs!.length > 0 && (<FormControl>
+        {floatingIPs!.length > 0 && (<FormControl fullWidth>
             <InputLabel htmlFor="floating-ip">Floating IP</InputLabel>
             <Select
+                fullWidth
                 value={selectedFloatingIP || floatingIPs![0].name}
                 onChange={setSelectedFloatingIP}
                 inputProps={{

@@ -41,9 +41,10 @@ export const LocalNetworkIdSelector = ({ selectedNetwork, setDefaultNetwork, set
     }
 
     return (<>
-        {networks!.length > 0 && (<FormControl>
+        {networks!.length > 0 && (<FormControl fullWidth>
             <InputLabel htmlFor="network">Network</InputLabel>
             <Select
+                fullWidth
                 value={selectedNetwork || networks![0].id}
                 onChange={setSelectedNetwork}
                 inputProps={{

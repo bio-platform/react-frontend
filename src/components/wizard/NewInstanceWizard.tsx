@@ -1,10 +1,10 @@
 import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, Typography, Divider, InputLabel, FormControl, Select } from "@material-ui/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { postInstance } from "../../api/InstanceApi";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { NormalTextField } from "../NormalTextField";
+import { CenterStack } from "../static/Positioning";
 import { WrongPath } from "../static/WrongPath";
 import { FloatingIPSelector } from "./FloatingIPSelector";
 import { LocalNetworkIdSelector } from "./LocalNetworkIdSelector";
@@ -132,24 +132,24 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
         // todo refactor
         switch (activeStep) {
             case 0:
-                return (
-                    <Box mt={2} mb={3} className={classes.step}>
+                return (<CenterStack>
+                    <Box mt={3} mb={3} width={1} maxWidth={500} className={classes.step}>
                         <div>
-                            <Box mt={2} mb={3}>
+                            <Box mb={1}>
                                 {
                                     configuration.textValues!.map(textVal => {
-                                        return (<Box mt={2} key={textVal}><NormalTextField required id={textVal} label={textVal} variant="outlined" value={instanceData.get(textVal) || ""} onChange={(text) => {
+                                        return (<Box mt={2} key={textVal}><NormalTextField fullWidth required id={textVal} label={textVal} value={instanceData.get(textVal) || ""} onChange={(text) => {
                                             instanceData.set(textVal, text);
                                             setInstanceData(new Map(instanceData));
                                         }} /></Box>);
                                     })
                                 }
                             </Box>
-                            {configuration.numberValues?.length === 0 && <Divider />}
-                            <Box mt={2} mb={3}>
+                            {configuration.numberValues?.length !== 0 && <Divider />}
+                            <Box mt={1}>
                                 {
                                     configuration.numberValues!.map(numVal => {
-                                        return (<Box mt={2} key={numVal}><NormalTextField type="number" required id={numVal} label={numVal} variant="outlined" value={instanceData.get(numVal) || 0} onChange={(val) => {
+                                        return (<Box mt={2} key={numVal}><NormalTextField fullWidth type="number" required id={numVal} label={numVal} value={instanceData.get(numVal) || 0} onChange={(val) => {
                                             instanceData.set(numVal, +val);
                                             setInstanceData(new Map(instanceData));
                                         }} /></Box>);
@@ -158,16 +158,16 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                             </Box>
                         </div>
                     </Box>
+                </CenterStack>
                 )
             case 1:
                 return (
-                    <Box mt={2} mb={3} className={classes.step}>
-
-                        <Box mt={2} mb={3}>
+                    <CenterStack>
+                        <Box mt={3} mb={3} width={1} maxWidth={500} className={classes.step}>
                             {
                                 configuration.options!.map(option => {
                                     return (<Box mt={2} key={option.name}>
-                                        <FormControl>
+                                        <FormControl fullWidth>
                                             <InputLabel htmlFor={option.name}>{option.name}</InputLabel>
                                             <Select
                                                 value={instanceData.get(option.name) || option.default}
@@ -175,7 +175,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                                     instanceData.set(option.name, event.target.value as string);
                                                     setInstanceData(new Map(instanceData));
                                                 }}
-
+                                                fullWidth
                                                 inputProps={{
                                                     name: option.name,
                                                     id: option.name,
@@ -190,28 +190,32 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                 })
                             }
                         </Box>
-                    </Box>
+                    </CenterStack>
                 )
             case 2:
-                return (<Box mt={4} mb={5} className={classes.step}>
-                    <div>
-                        <SSHKeySelector setDefaultKey={setDefaultKey} setSelectedKey={setSelectedKey} selectedKey={instanceData.get("ssh") || undefined} />
-                    </div>
-                    <div>
-                        <LocalNetworkIdSelector setDefaultNetwork={setDefaultNetwork} setSelectedNetwork={setSelectedNetwork} selectedNetwork={instanceData.get("local_network_id") || undefined} />
-                    </div>
-                    <div>
-                        <FloatingIPSelector setDefaultFloatingIP={setDefaultFloatingIP} setSelectedFloatingIP={setSelectedFloatingIP} selectedFloatingIP={instanceData.get("floating_ip") || undefined} />
-                    </div>
-
-                </Box>)
+                return (
+                    <CenterStack>
+                        <Box mt={3} mb={3} width={1} maxWidth={500} className={classes.step}>
+                            <Box mb={1} width={1} >
+                                <LocalNetworkIdSelector setDefaultNetwork={setDefaultNetwork} setSelectedNetwork={setSelectedNetwork} selectedNetwork={instanceData.get("local_network_id") || undefined} />
+                            </Box>
+                            <Box mb={1} width={1} >
+                                <FloatingIPSelector setDefaultFloatingIP={setDefaultFloatingIP} setSelectedFloatingIP={setSelectedFloatingIP} selectedFloatingIP={instanceData.get("floating_ip") || undefined} />
+                            </Box>
+                            <Box mb={1} width={1} >
+                                <SSHKeySelector setDefaultKey={setDefaultKey} setSelectedKey={setSelectedKey} selectedKey={instanceData.get("ssh") || undefined} />
+                            </Box>
+                        </Box>
+                    </CenterStack>)
 
             case 3:
-                return (<Box mt={4} mb={5} className={classes.step}>
-                    <div><Typography variant="h4">Building.</Typography></div>
-                    <div><Typography>Your instance is being created. Information about progress is on the dashboard.</Typography></div>
-                    <div><Button href="/dashboard" variant="contained" color="primary">Go to Dashboard</Button></div>
-                </Box>);
+                return (<CenterStack>
+                    <Box mt={3} mb={3} width={1} maxWidth={500} className={classes.step}>
+                        <div><Typography variant="h4">Building.</Typography></div>
+                        <div><Typography>Your instance is being created. Information about progress is on the dashboard.</Typography></div>
+                        <div><Button href="/dashboard" variant="contained" color="primary">Go to Dashboard</Button></div>
+                    </Box>
+                </CenterStack>);
             default:
                 return <WrongPath />
         }
@@ -220,7 +224,11 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
     return (
         <Container maxWidth='xl'>
             <Box mb={2} mt={2}>
+                <CenterStack>
+                    <Typography variant="h3">Create new instance</Typography>
+                </CenterStack>
                 {renderStep()}
+                <Divider />
                 <Grid
                     justify="center"
                     alignItems="center"
