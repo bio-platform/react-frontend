@@ -9,11 +9,11 @@ export const WrongPath = ({ message }: WrongPathProps) => {
     return (
         <Grid
             container
-            direction="row"
+            direction="column"
             justify="center"
             alignItems="center"
         >
-            <Typography >{message}</Typography>
+            <Typography>{message}</Typography>
             <Button href="/dashboard">Go to Dashboard</Button>
         </Grid>
     )
