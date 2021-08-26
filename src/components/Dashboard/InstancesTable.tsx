@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography, Box, Button } from '@material-ui/core';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, makeStyles, Typography, Box } from '@material-ui/core';
 import { Instance } from '../../models/Instance';
 import { DeleteInstanceButton } from '../static/CustomButtons';
-import { addFloatingIP, getInstructions } from '../../api/InstanceApi';
+import { getInstructions } from '../../api/InstanceApi';
 import { Network } from '../../models/Network';
 import { Instructions } from '../../models/Instructions';
 import { LoadingPage } from '../static/LoadingPage';
-import { InfoPopup } from '../static/InfoPopup';
+import { InfoDialog } from '../static/Dialogs';
 
 const useStyles = makeStyles({
     table: {
@@ -94,7 +94,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                                     {/* <Button variant="outlined" onClick={() => {
                                         addFloatingIP({ network_id: selectTestNetwork(), instance_id: instance.id });
                                     }}>Alocate IP</Button> */}
-                                    <InfoPopup instruction={instructions.get(instance.id)} />
+                                    <InfoDialog instruction={instructions.get(instance.id)} />
                                 </TableCell>
                             </TableRow>
                         ))}
