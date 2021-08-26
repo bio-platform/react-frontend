@@ -74,15 +74,6 @@ export const addFloatingIP = async (floating_ip: FloatingIP) => {
   });
 }
 
-export const postKeyPair = async (name: string) => {
-  await axios.post(API_URL + 'keypairs/', { keyname: name }, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  });
-}
-
 export const deleteInstance = async (instance: Instance) => {
   await axios.delete(API_URL + 'instances/' + instance.id + '/', {
     headers: {

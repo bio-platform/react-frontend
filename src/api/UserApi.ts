@@ -36,6 +36,15 @@ export const putProject = async (project: Project) => {
     });
 }
 
+export const postKey = async (keyPair: KeyPair) => {
+    await axios.post(API_URL + 'keypairs/', keyPair, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+  }
+
 export const getKeys = async () => {
     const response = await axios.get(API_URL + "keypairs/", {
         headers: {
