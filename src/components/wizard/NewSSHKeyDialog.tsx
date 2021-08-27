@@ -66,7 +66,7 @@ export const NewSSHKeyDialog = ({uploadKey} : NewSSHKeyDialogProps) => {
                 disabled={publicKey === "" || keyName === ""}
                 
                 onClick={() => {
-                    uploadKey({public_key : publicKey, key_name : keyName})
+                    uploadKey({public_key : publicKey, name : keyName})
                 }} color="primary">
                     Upload
                 </Button>
