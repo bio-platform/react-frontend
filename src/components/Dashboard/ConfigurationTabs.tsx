@@ -3,15 +3,17 @@ import { makeStyles, createStyles, Button, Theme, Box, AppBar, Tab, Tabs, Typogr
 
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import { ConfigurationData } from "../../models/ConfigurationData";
+import { useHistory } from "react-router-dom";
 
 type TabPanelProps = {
-    children?: JSX.Element|JSX.Element[],
+    children?: JSX.Element | JSX.Element[],
     index: number;
     value: number;
 }
 
 type ConfigurationTabsProps = {
     configurations: ConfigurationData[];
+    setConfiguration: (data: ConfigurationData) => void;
 }
 
 const TabPanel = ({ children, index, value }: TabPanelProps) => {
@@ -38,10 +40,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 
-export const ConfigurationTabs = ({ configurations }: ConfigurationTabsProps) => {
+export const ConfigurationTabs = ({ configurations, setConfiguration }: ConfigurationTabsProps) => {
     const [value, setValue] = useState(0);
     const [tags, setTags] = useState<Set<string>>(new Set<string>());
-    const classes = useStyles();
+    const history = useHistory();
 
     useEffect(() => {
         let parsedTags = new Set<string>();
@@ -57,36 +59,44 @@ export const ConfigurationTabs = ({ configurations }: ConfigurationTabsProps) =>
         setValue(newValue);
     };
 
+    const generateTabPanels = () => {
+        let i = 1;
+        return Array.from(tags).map(tag => {
+            return (<TabPanel value={value} index={i++}>
+                <>
+                    {configurations.filter(conf => {
+                        return conf.tags.includes(tag)
+                    }).map(conf => {
+                        return (<Button key={conf.name} onClick={() => {
+                            setConfiguration(conf);
+                            history.push("/dashboard/create-new-instance");
+                        }}>{conf.name}</Button>)
+                    })}
+                </>
+            </TabPanel>)
+        })
+    }
+
 
     return (<div >
         <AppBar position="static">
-            <Tabs value={value} 
-            onChange={handleChange} 
-            variant="scrollable"
-            scrollButtons="auto"
-            aria-label="Tabs with configurations">
+            <Tabs value={value}
+                onChange={handleChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                aria-label="Tabs with configurations">
                 <Tab label="all" />
                 {Array.from(tags).map(tag => { return <Tab key={tag} label={tag} /> })}
             </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-            <>{configurations.map(conf => {return <Typography>{conf.name}</Typography>})}</>
+            <>{configurations.map(conf => {
+                return (<Button key={conf.name} onClick={() => {
+                    setConfiguration(conf);
+                    history.push("/dashboard/create-new-instance");
+                }}>{conf.name}</Button>)
+            })}</>
         </TabPanel>
-        <TabPanel value={value} index={1}>
-            <Typography>Item 2</Typography>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-            <Typography>Item 3</Typography>
-        </TabPanel>
-        <TabPanel value={value} index={3}>
-            <Typography>Item 4</Typography>
-        </TabPanel>
-
-        <TabPanel value={value} index={4}>
-            <Typography>Item 5</Typography>
-        </TabPanel>
-        <TabPanel value={value} index={5}>
-            <Typography>Item 6</Typography>
-        </TabPanel>
+        {generateTabPanels()}
     </div>)
 }

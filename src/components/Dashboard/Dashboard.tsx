@@ -73,17 +73,9 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
                     <Typography variant='h2'> Create new instance </Typography>
                     <Divider />
                 </Box>
-                
+
                 <Box>
-                    {/* todo tabs */}
-                    {configurationData.map((data) => (<Button key={data.name} onClick={() => {
-                        setConfiguration(data);
-                        history.push("/dashboard/create-new-instance");
-                    }}>{data.name}</Button>)
-                    )}
-
-                    <ConfigurationTabs configurations={configurationData} />
-
+                    <ConfigurationTabs configurations={configurationData} setConfiguration={setConfiguration} />
                 </Box>
                 <Box mt={2} mb={3}>
                     <Typography variant='h2'> Overview </Typography>
