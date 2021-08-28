@@ -13,6 +13,7 @@ import { Network } from "../../models/Network";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { useHistory } from "react-router-dom";
+import { ConfigurationTabs } from "./ConfigurationTabs";
 
 export type DashboardProps = {
     setConfiguration: (data: ConfigurationData) => void
@@ -80,6 +81,8 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
                         history.push("/dashboard/create-new-instance");
                     }}>{data.name}</Button>)
                     )}
+
+                    <ConfigurationTabs configurations={configurationData} />
 
                 </Box>
                 <Box mt={2} mb={3}>
