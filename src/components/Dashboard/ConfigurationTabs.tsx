@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { makeStyles, createStyles, Button, Theme, Box, AppBar, Tab, Tabs, Typography } from "@material-ui/core"
-
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import { Button, AppBar, Tab, Tabs, Grid, Typography, Box } from "@material-ui/core"
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { useHistory } from "react-router-dom";
+import { HeaderPaper } from "../HeaderPaper";
+
+type ConfigurationBoxProps = {
+    configuration: ConfigurationData;
+    setConfiguration: (data: ConfigurationData) => void;
+}
 
 type TabPanelProps = {
     children?: JSX.Element | JSX.Element[],
@@ -16,6 +20,28 @@ type ConfigurationTabsProps = {
     setConfiguration: (data: ConfigurationData) => void;
 }
 
+const ConfigurationBox = ({ configuration, setConfiguration }: ConfigurationBoxProps) => {
+    const history = useHistory();
+
+    return (
+        <Grid key={configuration.name} xs={12} sm={4} md={3} lg={2} item={true}>
+            <HeaderPaper title={configuration.name} color="secondary">
+                <Box mt={2} mb={2}>
+                    <Typography>Tags: {configuration.tags.map(tag => { return tag + ", " })}</Typography>
+                </Box>
+                <Box mt={1}>
+                    <Button onClick={() => {
+                        setConfiguration(configuration);
+                        history.push("/dashboard/create-new-instance");
+                    }} color="primary">
+                        Build instance
+                    </Button>
+                </Box>
+            </HeaderPaper>
+        </Grid>
+    )
+}
+
 const TabPanel = ({ children, index, value }: TabPanelProps) => {
     return (
         <div
@@ -25,20 +51,11 @@ const TabPanel = ({ children, index, value }: TabPanelProps) => {
             aria-labelledby={`scrollable-auto-tab-${index}`}
         >
             {value === index && (
-                { ...children } // todo does not work
-
+                { ...children }
             )}
         </div>
     );
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        flexGrow: 1,
-        // backgroundColor: theme.palette.background.paper,
-    },
-}));
-
 
 export const ConfigurationTabs = ({ configurations, setConfiguration }: ConfigurationTabsProps) => {
     const [value, setValue] = useState(0);
@@ -62,21 +79,19 @@ export const ConfigurationTabs = ({ configurations, setConfiguration }: Configur
     const generateTabPanels = () => {
         let i = 1;
         return Array.from(tags).map(tag => {
-            return (<TabPanel value={value} index={i++}>
-                <>
-                    {configurations.filter(conf => {
-                        return conf.tags.includes(tag)
-                    }).map(conf => {
-                        return (<Button key={conf.name} onClick={() => {
-                            setConfiguration(conf);
-                            history.push("/dashboard/create-new-instance");
-                        }}>{conf.name}</Button>)
-                    })}
-                </>
+            return (<TabPanel key={i} value={value} index={i++}>
+                <Box mt={5} mb={5}>
+                    <Grid container spacing={3}>
+                        {configurations.filter(conf => {
+                            return conf.tags.includes(tag)
+                        }).map(conf => {
+                            return (<ConfigurationBox key={conf.name + i} configuration={conf} setConfiguration={setConfiguration} />)
+                        })}
+                    </Grid>
+                </Box>
             </TabPanel>)
         })
     }
-
 
     return (<div >
         <AppBar position="static">
@@ -90,12 +105,13 @@ export const ConfigurationTabs = ({ configurations, setConfiguration }: Configur
             </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-            <>{configurations.map(conf => {
-                return (<Button key={conf.name} onClick={() => {
-                    setConfiguration(conf);
-                    history.push("/dashboard/create-new-instance");
-                }}>{conf.name}</Button>)
-            })}</>
+            <Box mt={5} mb={5}>
+                <Grid container spacing={3}>
+                    {configurations.map(conf => {
+                        return (<ConfigurationBox key={conf.name + "0"} configuration={conf} setConfiguration={setConfiguration} />)
+                    })}
+                </Grid>
+            </Box>
         </TabPanel>
         {generateTabPanels()}
     </div>)

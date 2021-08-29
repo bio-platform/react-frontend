@@ -4,6 +4,7 @@ import { makeStyles, Theme, createStyles, Paper, Typography } from "@material-ui
 type Props = {
     title: string;
     children?: React.ReactNode;
+    color?: "primary" | "secondary";
 };
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -20,6 +21,13 @@ const useStyles = makeStyles((theme: Theme) =>
             backgroundColor: theme.palette.info.main,
             color: theme.palette.primary.contrastText,
             borderRadius: 4,
+        },
+        paperHeaderSecondary: {
+            marginTop: -theme.spacing(5),
+            padding: theme.spacing(2),
+            backgroundColor: theme.palette.secondary.main,
+            color: theme.palette.primary.contrastText,
+            borderRadius: 4,
         }
     }),
 );
@@ -29,7 +37,7 @@ export const HeaderPaper = (props : Props) => {
 
     return (
         <Paper className={styles.paper}>
-            <div className={styles.paperHeader}>
+            <div className={props.color === "secondary" ? styles.paperHeaderSecondary : styles.paperHeader}>
                 <Typography variant='h6'>{props.title}</Typography>
             </div>
             {props.children}
