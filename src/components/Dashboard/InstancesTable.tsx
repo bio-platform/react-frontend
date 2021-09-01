@@ -83,7 +83,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                         {instances.map((instance) => (
                             <TableRow className={classes.tableRow} key={instance.id}>
                                 <TableCell component="th" scope="row">
-                                    {instance.name + "  ---  " + instance.id}
+                                    {instance.name}
                                 </TableCell>
                                 <TableCell align="left">{instance.status}</TableCell>
                                 <TableCell align="left">{instructions.get(instance.id)?.floating_ip !== null ? instructions.get(instance.id)?.floating_ip : "Allocate ip todo"}</TableCell>
