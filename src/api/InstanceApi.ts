@@ -83,6 +83,19 @@ export const deleteInstance = async (instance: Instance) => {
   });
 }
 
+export const deleteInstanceV2 = async (workspace_id: string, name: string) => {
+  await axios.delete(API_URL + 'instancesv2/', {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      workspace_id: workspace_id, 
+      name: name
+    },
+    withCredentials: true,
+  });
+}
+
 export const getInstructions = async (instance: Instance) => {
   const response = await axios.get(API_URL + "instructions/" + instance.id + '/', {
     headers: {

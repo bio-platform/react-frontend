@@ -1,6 +1,6 @@
 import { IconButton } from "@material-ui/core"
 import React, { useContext } from "react"
-import { deleteInstance } from "../../api/InstanceApi"
+import { deleteInstance, deleteInstanceV2 } from "../../api/InstanceApi"
 import { Instance } from "../../models/Instance"
 import DeleteIcon from '@material-ui/icons/Delete';
 import { ConfirmationDialog } from "./Dialogs";
@@ -31,7 +31,11 @@ export const DeleteInstanceButton = (props: DeleteInstanceButtonProps) => {
             open={open}
             handleConfirm={async () => {
                 try {
-                    await deleteInstance(props.instance);
+                    if (props.instance.metadata.workspace_id && props.instance.metadata.name) {
+                        await deleteInstanceV2(props.instance.metadata.workspace_id!, props.instance.metadata.name!);
+                    } else {
+                        await deleteInstance(props.instance);
+                    }
                     await props.reloadData();
                 } catch (err) {
                     if (err.response.status === 401) {
