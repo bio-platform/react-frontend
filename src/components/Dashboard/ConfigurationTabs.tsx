@@ -22,10 +22,11 @@ type ConfigurationTabsProps = {
 
 const ConfigurationBox = ({ configuration, setConfiguration }: ConfigurationBoxProps) => {
     const history = useHistory();
+    const capitalize = (s: string) => { return (s && s[0].toUpperCase() + s.slice(1)) };
 
     return (
         <Grid key={configuration.name} xs={12} sm={4} md={3} lg={2} item={true}>
-            <HeaderPaper title={configuration.name} color="secondary">
+            <HeaderPaper title={capitalize(configuration.name)} color="secondary">
                 <Box mt={2} mb={2}>
                     <Typography>Tags: {configuration.tags.map(tag => { return tag + ", " })}</Typography>
                 </Box>
