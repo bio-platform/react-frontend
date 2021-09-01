@@ -7,13 +7,14 @@ import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { Limit } from "../../models/Limit";
 import { getLimits, getNetworks } from "../../api/UserApi";
 import { LoadingPage } from "../static/LoadingPage";
-import { getConfigurations, getInstances } from "../../api/InstanceApi";
+import { getConfigurations, getFloatingIps, getInstances } from "../../api/InstanceApi";
 import { Instance } from "../../models/Instance";
 import { Network } from "../../models/Network";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import { useHistory } from "react-router-dom";
 import { ConfigurationTabs } from "./ConfigurationTabs";
+import { FloatingIPData } from "../../models/FloatingIPData";
 
 export type DashboardProps = {
     setConfiguration: (data: ConfigurationData) => void
@@ -24,18 +25,19 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
     const [instances, setInstances] = useState<Instance[]>([])
     const [configurationData, setConfigurationData] = useState<ConfigurationData[]>([]);
     const [networks, setNetworks] = useState<Network[]>([]);
+    const [floatingIps, setFloatingIps] = useState<FloatingIPData[]>([])
     const [loading, setLoading] = useState(true);
     const [minorLoading, setMinorLoading] = useState(false);
     const context = useContext<AuthContextType>(AuthContext);
-    const history = useHistory();
 
     const reloadData = async () => {
         try {
-            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getConfigurations()]);
+            const responses = await Promise.all([getLimits(), getInstances(), getNetworks(), getConfigurations(), getFloatingIps()]);
             setLimit(responses[0]);
             setInstances(responses[1]);
             setNetworks(responses[2]);
             setConfigurationData(responses[3]);
+            setFloatingIps(responses[4]);
             setLoading(false);
             setMinorLoading(false);
         } catch (err) {
@@ -96,7 +98,7 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
                     </Typography>
                     {minorLoading && <LinearProgress />}
                 </Box>
-                <InstancesTable instances={instances} reloadData={reloadDataWithDelay} networks={networks} />
+                <InstancesTable floatingIps={floatingIps} instances={instances} reloadData={reloadDataWithDelay} />
             </Container>
         </div >
     )

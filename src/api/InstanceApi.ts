@@ -65,8 +65,8 @@ export const getFloatingIps = async () => {
   return response.data as FloatingIPData[];
 }
 
-export const addFloatingIP = async (floating_ip: FloatingIP) => {
-  await axios.post(API_URL + 'floating_ips/', floating_ip, {
+export const addFloatingIP = async (instance_id: string, floating_ip: string) => {
+  await axios.put(API_URL + 'floating_ips/', { instance_id: instance_id, floating_ip: floating_ip }, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -89,7 +89,7 @@ export const deleteInstanceV2 = async (workspace_id: string, name: string) => {
       "Content-Type": "application/json",
     },
     data: {
-      workspace_id: workspace_id, 
+      workspace_id: workspace_id,
       name: name
     },
     withCredentials: true,

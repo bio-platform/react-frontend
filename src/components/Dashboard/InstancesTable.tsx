@@ -6,7 +6,8 @@ import { getInstructions } from '../../api/InstanceApi';
 import { Network } from '../../models/Network';
 import { Instructions } from '../../models/Instructions';
 import { LoadingPage } from '../static/LoadingPage';
-import { InfoDialog } from '../static/Dialogs';
+import { FloatingIpDialog, InfoDialog } from '../static/Dialogs';
+import { FloatingIPData } from '../../models/FloatingIPData';
 
 const useStyles = makeStyles({
     table: {
@@ -22,14 +23,14 @@ const useStyles = makeStyles({
 type Props = {
     instances: Instance[] | undefined;
     reloadData: () => void;
-    networks: Network[] | undefined;
+    floatingIps: FloatingIPData[] | undefined;
 }
 
-export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
+export const InstancesTable = ({ instances, reloadData, floatingIps }: Props) => {
     const classes = useStyles();
     const [loading, setLoading] = useState(true);
     const [instructions, setInstructions] = useState(new Map<string, Instructions>());
-    
+
     useEffect(() => {
         (async () => {
             setLoading(true);
@@ -37,7 +38,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                 setLoading(false);
                 return;
             }
-            const responses = await Promise.all(instances!.map(instance => {return getInstructions(instance)}));
+            const responses = await Promise.all(instances!.map(instance => { return getInstructions(instance) }));
             for (let i = 0; i < responses.length; i++) {
                 instructions.set(instances![i].id, responses[i]);
             }
@@ -51,7 +52,7 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
     }
 
     if (loading) {
-        return <LoadingPage size={50}/>;
+        return <LoadingPage size={50} />;
     }
 
     return (
@@ -75,7 +76,12 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
                                     {instance.name}
                                 </TableCell>
                                 <TableCell align="left">{instance.status}</TableCell>
-                                <TableCell align="left">{instructions.get(instance.id)?.floating_ip !== null ? instructions.get(instance.id)?.floating_ip : "Allocate ip todo"}</TableCell>
+                                <TableCell align="left">
+                                    {instructions.get(instance.id)?.floating_ip !== null ?
+                                        instructions.get(instance.id)?.floating_ip :
+                                        <FloatingIpDialog setLoading={setLoading} floatingIPs={floatingIps || []} instanceId={instance.id} reloadData={reloadData} />
+                                    }
+                                </TableCell>
                                 <TableCell align="left">{instance.flavor.vcpus}</TableCell>
                                 <TableCell align="left">{Math.floor(instance.flavor.ram / 1024)} GB</TableCell>
                                 <TableCell align="center">

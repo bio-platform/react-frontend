@@ -1,4 +1,4 @@
-import { IconButton } from "@material-ui/core"
+import { Button, IconButton } from "@material-ui/core"
 import React, { useContext } from "react"
 import { deleteInstance, deleteInstanceV2 } from "../../api/InstanceApi"
 import { Instance } from "../../models/Instance"
