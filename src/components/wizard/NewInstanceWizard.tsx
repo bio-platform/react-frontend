@@ -51,6 +51,8 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
 
     const classes = useStyles();
 
+    const capitalize = (s: string) => { return (s && s[0].toUpperCase() + s.slice(1)) };
+
     if (configuration === undefined) {
         return <Box mt={2} mb={2}><WrongPath message="Configuration was not selected." /></Box>
     }
@@ -138,10 +140,17 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                             <Box mb={1}>
                                 {
                                     configuration.textValues!.map(textVal => {
-                                        return (<Box mt={2} key={textVal}><NormalTextField fullWidth required id={textVal} label={textVal} value={instanceData.get(textVal) || ""} onChange={(text) => {
-                                            instanceData.set(textVal, text);
-                                            setInstanceData(new Map(instanceData));
-                                        }} /></Box>);
+                                        return (<Box mt={2} key={textVal}>
+                                            <NormalTextField fullWidth
+                                                required
+                                                id={textVal}
+                                                label={capitalize(textVal.replace('_', " "))}
+                                                value={instanceData.get(textVal) || ""}
+                                                onChange={(text) => {
+                                                    instanceData.set(textVal, text);
+                                                    setInstanceData(new Map(instanceData));
+                                                }} />
+                                        </Box>);
                                     })
                                 }
                             </Box>
@@ -149,10 +158,19 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                             <Box mt={1}>
                                 {
                                     configuration.numberValues!.map(numVal => {
-                                        return (<Box mt={2} key={numVal}><NormalTextField fullWidth type="number" required id={numVal} label={numVal} value={instanceData.get(numVal) || 0} onChange={(val) => {
-                                            instanceData.set(numVal, +val);
-                                            setInstanceData(new Map(instanceData));
-                                        }} /></Box>);
+                                        return (<Box mt={2} key={numVal}>
+                                            <NormalTextField
+                                                fullWidth
+                                                type="number"
+                                                required
+                                                id={numVal}
+                                                label={capitalize(numVal.replace('_', " "))}
+                                                value={instanceData.get(numVal) || 0}
+                                                onChange={(val) => {
+                                                    instanceData.set(numVal, +val);
+                                                    setInstanceData(new Map(instanceData));
+                                                }} />
+                                        </Box>);
                                     })
                                 }
                             </Box>
@@ -168,7 +186,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                 configuration.options!.map(option => {
                                     return (<Box mt={2} key={option.name}>
                                         <FormControl fullWidth>
-                                            <InputLabel htmlFor={option.name}>{option.name}</InputLabel>
+                                            <InputLabel htmlFor={option.name}>{capitalize(option.name.replace('_', " "))}</InputLabel>
                                             <Select
                                                 value={instanceData.get(option.name) || option.default}
                                                 onChange={(event) => {
@@ -225,7 +243,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
         <Container maxWidth='xl'>
             <Box mb={2} mt={2}>
                 <CenterStack>
-                    <Typography variant="h3">Create new instance</Typography>
+                    <Typography variant="h3">Create new {configuration.name}</Typography>
                 </CenterStack>
                 {renderStep()}
                 <Divider />

@@ -54,17 +54,6 @@ export const InstancesTable = ({ instances, reloadData, networks }: Props) => {
         return <LoadingPage size={50}/>;
     }
 
-    const selectTestNetwork = () => {
-        if (networks) {
-            for (let network of networks) {
-                if (network.name === "78-128-250-pers-proj-net") {
-                    return network.id;
-                }
-            }
-        }
-        return '';
-    }
-
     return (
         <Box mb={6}>
             <TableContainer component={Paper}>
