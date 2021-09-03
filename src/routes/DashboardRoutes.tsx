@@ -9,6 +9,7 @@ import { NewInstanceWizard } from "../components/wizard/NewInstanceWizard";
 import { AuthContextType, AuthContext } from "./AuthProvider";
 import { ChooseProject } from "../components/dashboard/ChooseProject";
 import { ConfigurationData } from "../models/ConfigurationData";
+import { Footer } from "../components/Footer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -72,6 +73,7 @@ export const DashboardRoutes = () => {
                 </Route>
                 {context?.project ? <Redirect to="/dashboard/overview" from="/dashboard" /> : <Redirect to="/dashboard/choose-project" from="/dashboard" />}
             </Switch>
+            <Footer />
         </Router>
     )
 }
