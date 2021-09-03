@@ -1,7 +1,8 @@
 import React, { useContext } from "react"
-import { Avatar, Button, Container, makeStyles, Typography } from "@material-ui/core"
+import { Avatar, Box, Button, Container, makeStyles, Typography } from "@material-ui/core"
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import { AuthContextType, AuthContext } from "../routes/AuthProvider";
+import { Logos } from "./Footer";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -23,7 +24,7 @@ export const SignIn = () => {
     const classes = useStyles();
     const context = useContext<AuthContextType>(AuthContext);
 
-    return (
+    return (<>
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
@@ -46,5 +47,9 @@ export const SignIn = () => {
                 </Button>
             </div>
         </Container>
+        <Box mt={6}>
+            <Logos />
+        </Box>
+    </>
     );
 }
