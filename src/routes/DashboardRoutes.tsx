@@ -21,6 +21,16 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         link: {
             color: theme.palette.primary.contrastText,
+        },
+        body: {
+            height: "100vh",
+            margin: 0,
+            display: "flex",
+            flexDirection: "column",
+        },
+
+        footer: {
+            marginTop: "auto",
         }
     }),
 );
@@ -43,37 +53,39 @@ export const DashboardRoutes = () => {
     };
 
     return (
-        <Router>
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleDrawerOpen} >
-                        <Menu />
-                    </IconButton>
-                    <div className={classes.title}>
-                        <Link variant="h6" className={classes.link} href="/dashboard" underline="none">
-                            Dashboard
+        <div className={classes.body}>
+            <Router>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleDrawerOpen} >
+                            <Menu />
+                        </IconButton>
+                        <div className={classes.title}>
+                            <Link variant="h6" className={classes.link} href="/dashboard" underline="none">
+                                Dashboard
                         </Link>
-                    </div>
-                    <Button color="inherit" onClick={() => {
-                        context?.logout();
-                        history.push("/auth/signin");
-                    }}>Log out</Button>
-                </Toolbar>
-            </AppBar>
-            <Switch >
-                <Route path='/dashboard/overview' >
-                    <UniversalDrawer open={open} handleDrawerClose={handleDrawerClose} itemList={DashboardDrawerList} />
-                    <Dashboard setConfiguration={setConfiguration} />
-                </Route>
-                <Route exact path="/dashboard/create-new-instance">
-                    <NewInstanceWizard configuration={configuration!} />
-                </Route>
-                <Route path='/dashboard/choose-project' >
-                    <ChooseProject />
-                </Route>
-                {context?.project ? <Redirect to="/dashboard/overview" from="/dashboard" /> : <Redirect to="/dashboard/choose-project" from="/dashboard" />}
-            </Switch>
-            <Footer />
-        </Router>
+                        </div>
+                        <Button color="inherit" onClick={() => {
+                            context?.logout();
+                            history.push("/auth/signin");
+                        }}>Log out</Button>
+                    </Toolbar>
+                </AppBar>
+                <Switch >
+                    <Route path='/dashboard/overview' >
+                        <UniversalDrawer open={open} handleDrawerClose={handleDrawerClose} itemList={DashboardDrawerList} />
+                        <Dashboard setConfiguration={setConfiguration} />
+                    </Route>
+                    <Route exact path="/dashboard/create-new-instance">
+                        <NewInstanceWizard configuration={configuration!} />
+                    </Route>
+                    <Route path='/dashboard/choose-project' >
+                        <ChooseProject />
+                    </Route>
+                    {context?.project ? <Redirect to="/dashboard/overview" from="/dashboard" /> : <Redirect to="/dashboard/choose-project" from="/dashboard" />}
+                </Switch>
+            </Router>
+            <Footer className={classes.footer}/>
+        </div>
     )
 }

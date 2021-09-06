@@ -23,10 +23,14 @@ export const Logos = () => {
     </Container>);
 }
 
-export const Footer = () => {
+type FooterProps = {
+    className: string;
+}
+
+export const Footer = ({ className }: FooterProps) => {
 
 
-    return (<Box mt={4}>
+    return (<Box mt={4} className={className}>
         <Paper elevation={3}>
             <Logos />
         </Paper>

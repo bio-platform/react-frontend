@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme: Theme) =>
             '& > *': {
                 margin: theme.spacing(1),
             },
+        },
+        stepper: {
+            backgroundColor : 'transparent',
         }
     }),
 );
@@ -291,7 +294,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                     }
                 </Grid>
             </Box>
-            <Stepper activeStep={activeStep} >
+            <Stepper className={classes.stepper} activeStep={activeStep} >
                 {steps.map(step => {
                     return (<Step key={step}>
                         <StepLabel>{step}</StepLabel>

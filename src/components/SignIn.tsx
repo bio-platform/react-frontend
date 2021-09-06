@@ -18,6 +18,17 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    body: {
+        height: "100vh",
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+    },
+
+    footer: {
+        marginTop: "auto",
+    }
+
 }));
 
 export const SignIn = () => {
@@ -47,7 +58,7 @@ export const SignIn = () => {
                 </Button>
             </div>
         </Container>
-        <Box mt={6}>
+        <Box mt={6} >
             <Logos />
         </Box>
     </>
