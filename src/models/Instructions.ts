@@ -1,4 +1,4 @@
 export interface Instructions {
-    instructions: undefined | string;
-    floating_ip: undefined | string;
+    instructions: null | string;
+    floating_ip: null | string;
 }

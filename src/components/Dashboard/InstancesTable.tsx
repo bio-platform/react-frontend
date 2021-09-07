@@ -40,7 +40,7 @@ export const InstancesTable = ({ instances, reloadData, floatingIps }: Props) =>
             }
             const responses = await Promise.all(instances!.map(instance => { return getInstructions(instance) }));
             for (let i = 0; i < responses.length; i++) {
-                instructions.set(instances![i].id, responses[i]);
+                instructions.set(instances![i].id, responses[i] || {floating_ip: null, instructions: null});
             }
             setInstructions(new Map<string, Instructions>(instructions));
             setLoading(false);

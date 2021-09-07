@@ -66,7 +66,7 @@ export const InfoDialog = ({ instruction }: InfoDialogProps) => {
                     id="scroll-dialog-description"
                     tabIndex={-1}
                 >
-                    {instruction?.instructions}
+                    {instruction?.instructions !== null ? instruction?.instructions : "Instructions in progress" }
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -83,11 +83,11 @@ type FloatingIpDialogProps = {
     floatingIPs: FloatingIPData[];
     instanceId: string;
     reloadData: () => void;
-    setLoading: (state : boolean) => void;
+    setLoading: (state: boolean) => void;
 }
 
 
-export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData , setLoading}: FloatingIpDialogProps) => {
+export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData, setLoading }: FloatingIpDialogProps) => {
     const [open, setOpen] = useState(false);
     const [selectedIp, setSelectedIp] = useState<string>(floatingIPs[0].name);
 
@@ -134,7 +134,11 @@ export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData , setLoad
                 <Button onClick={async () => {
                     setOpen(false);
                     setLoading(true);
-                    await addFloatingIP(instanceId, selectedIp);
+                    try {
+                        await addFloatingIP(instanceId, selectedIp);
+                    } catch (err) {
+                        setLoading(false);
+                    }
                     reloadData();
                 }}
                     color="primary"
