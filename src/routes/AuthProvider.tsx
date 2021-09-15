@@ -90,7 +90,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
                 },
                 withCredentials: true,
             });
-            handleSetUser({ token: oidcUser.access_token, email: oidcUser.profile.email!, name: oidcUser.profile.name! });
+            handleSetUser({ token: oidcUser.access_token, email: oidcUser.profile.email!, name: oidcUser.profile.preferred_username! });
         } else {
             mgr.signinRedirect();
         }
