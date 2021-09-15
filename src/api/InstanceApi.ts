@@ -107,7 +107,7 @@ export const getInstructions = async (instance: Instance) => {
     return response.data as Instructions;
   } catch (err) {
     // if (err.response.status === 404) {
-    return { floating_ip: null, instructions: null } as Instructions;
+    return { floating_ip: 'Cannot load IP', instructions: null } as Instructions;
     // }
   }
 
