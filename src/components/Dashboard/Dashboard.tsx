@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
-import { Container, Typography, Box, Divider, Button, IconButton, LinearProgress } from "@material-ui/core"
+import { Container, Typography, Box, Divider, IconButton, LinearProgress } from "@material-ui/core"
 import { InstancesTable } from "./InstancesTable";
 import { Limits } from "./Limits";
 import { DashboardDrawerList } from "../../constants/RoutesConstants";
@@ -12,7 +12,6 @@ import { Instance } from "../../models/Instance";
 import { Network } from "../../models/Network";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { useHistory } from "react-router-dom";
 import { ConfigurationTabs } from "./ConfigurationTabs";
 import { FloatingIPData } from "../../models/FloatingIPData";
 
@@ -89,7 +88,7 @@ export const Dashboard = ({ setConfiguration }: DashboardProps) => {
                 <Limits limit={limit} />
                 <Box mt={2} mb={3} id={DashboardDrawerList[2][2].toString()}>
                     <Typography variant='h3'> Instances
-                            <IconButton onClick={async () => {
+                        <IconButton onClick={async () => {
                             setMinorLoading(true);
                             reloadData();
                         }}>

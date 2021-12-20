@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, IconButton, InputLabel, FormControl, Select } from "@material-ui/core"
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, IconButton, InputLabel, FormControl, Select, Typography } from "@material-ui/core"
 import InfoIcon from '@material-ui/icons/Info';
 import React, { useState } from "react";
 import { addFloatingIP } from "../../api/InstanceApi";
@@ -29,10 +29,10 @@ export const ConfirmationDialog = (props: ConfirmationDialogProps) => {
         <DialogActions>
             <Button onClick={() => { props.handleClose(); }} color="primary">
                 Cancel
-          </Button>
+            </Button>
             <Button onClick={() => { props.handleConfirm(); props.handleClose(); }} color="primary" autoFocus>
                 Confirm
-          </Button>
+            </Button>
         </DialogActions>
     </Dialog>)
 }
@@ -66,13 +66,13 @@ export const InfoDialog = ({ instruction }: InfoDialogProps) => {
                     id="scroll-dialog-description"
                     tabIndex={-1}
                 >
-                    {instruction?.instructions !== null ? instruction?.instructions : "Instructions in progress" }
+                    {instruction?.instructions !== null ? instruction?.instructions : "Instructions in progress"}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => { setOpen(false) }} color="primary">
                     Close
-          </Button>
+                </Button>
             </DialogActions>
         </Dialog>
 
@@ -89,7 +89,7 @@ type FloatingIpDialogProps = {
 
 export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData, setLoading }: FloatingIpDialogProps) => {
     const [open, setOpen] = useState(false);
-    const [selectedIp, setSelectedIp] = useState<string>(floatingIPs[0].name);
+    const [selectedIp, setSelectedIp] = useState<string>(floatingIPs === [] ? '' : floatingIPs[0]?.name);
 
     return (<>
         <Button aria-label="alocate ip" onClick={() => {
@@ -111,6 +111,10 @@ export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData, setLoadi
                     id="scroll-dialog-description"
                     tabIndex={-1}
                 >
+                    <Typography>
+                        Be aware that this action can steal allocated floating IP from other instance.
+                        Check your instances and select appropriate IP.
+                    </Typography>
                     <FormControl fullWidth>
                         <InputLabel htmlFor={'floatingIps'}>Floating IP</InputLabel>
                         <Select
@@ -120,9 +124,9 @@ export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData, setLoadi
                             }}
                             fullWidth
                         >
-                            {floatingIPs.map((value) => {
+                            {floatingIPs !== [] ? floatingIPs.map((value) => {
                                 return <option key={value.name} value={value.name}>{value.name}</option>
-                            })}
+                            }) : <option key={''} value={''}>You don't have any floating ip to add</option>}
                         </Select>
                     </FormControl>
                 </DialogContentText>
@@ -130,7 +134,7 @@ export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData, setLoadi
             <DialogActions>
                 <Button onClick={() => { setOpen(false) }} color="primary">
                     Close
-          </Button>
+                </Button>
                 <Button onClick={async () => {
                     setOpen(false);
                     setLoading(true);
@@ -144,7 +148,7 @@ export const FloatingIpDialog = ({ floatingIPs, instanceId, reloadData, setLoadi
                     color="primary"
                     autoFocus>
                     Confirm
-          </Button>
+                </Button>
             </DialogActions>
         </Dialog>
 

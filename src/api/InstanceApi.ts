@@ -5,6 +5,7 @@ import { Instance } from './../models/Instance';
 import axios from "axios";
 import { API_URL } from "../constants/Environment";
 import { Instructions } from '../models/Instructions';
+import { Task } from '../models/Task';
 
 export const getInstances = async () => {
   const response = await axios.get(API_URL + "instances/", {
@@ -111,4 +112,14 @@ export const getInstructions = async (instance: Instance) => {
     // }
   }
 
+}
+
+export const getTask = async (taskId: string) => {
+    const response = await axios.get(API_URL + "tasks/" + taskId + '/', {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    });
+    return response.data as Task;
 }
