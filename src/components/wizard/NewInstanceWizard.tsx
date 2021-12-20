@@ -1,6 +1,7 @@
 import { Container, Button, Stepper, Step, StepLabel, createStyles, makeStyles, Theme, Grid, Box, Typography, Divider, InputLabel, FormControl, Select } from "@material-ui/core";
+import pWaitFor, { TimeoutError } from "p-wait-for";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
-import { postInstance } from "../../api/InstanceApi";
+import { getTask, postInstance } from "../../api/InstanceApi";
 import { ConfigurationData } from "../../models/ConfigurationData";
 import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
 import { NormalTextField } from "../NormalTextField";
@@ -26,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         stepper: {
-            backgroundColor : 'transparent',
+            backgroundColor: 'transparent',
         }
     }),
 );
@@ -39,6 +40,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
     const [activeStep, setActiveStep] = useState(0);
     const [instanceData, setInstanceData] = useState(new Map<string, string | number>());
     const [creating, setCreating] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const context = useContext<AuthContextType>(AuthContext);
 
@@ -232,9 +234,19 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
             case 3:
                 return (<CenterStack>
                     <Box mt={3} mb={3} width={1} maxWidth={500} className={classes.step}>
-                        <div><Typography variant="h4">Building.</Typography></div>
-                        <div><Typography>Your instance is being created. Information about progress is on the dashboard.</Typography></div>
-                        <div><Button href="/dashboard" variant="contained" color="primary">Go to Dashboard</Button></div>
+                        {errorMessage === '' ? (<>
+                            <div><Typography variant="h4">Building.</Typography></div>
+                            <div><Typography>Your instance is being created. Information about progress is on the dashboard.</Typography></div>
+                            <div><Button href="/dashboard" variant="contained" color="primary">Go to Dashboard</Button></div>
+                        </>)
+                            :
+                            (<>
+                                <div><Typography variant="h4">Error.</Typography></div>
+                                <div><Typography>{errorMessage}</Typography></div>
+                                <div><Button href="/dashboard" variant="contained" color="primary">Go to Dashboard</Button></div>
+                            </>)}
+
+
                     </Box>
                 </CenterStack>);
             default:
@@ -261,7 +273,7 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                             size="large"
                             onClick={() => setActiveStep(activeStep - 1)}>
                             Previous
-                    </Button>
+                        </Button>
                     }
                     {activeStep < steps.length - 1 &&
                         <Button variant="contained"
@@ -274,16 +286,40 @@ export const NewInstanceWizard = ({ configuration }: NewInstanceWizardProps) => 
                                         setCreating(true);
                                         instanceData.set("user_name", context!.user!.name);
                                         instanceData.set("user_email", context!.user!.email);
-                                        await postInstance(configuration.name, instanceData);
-                                        setCreating(false);
+                                        const taskId = await postInstance(configuration.name, instanceData);
+                                        try {
+                                            await pWaitFor(async () => {
+                                                const state = (await getTask(taskId)).state;
+                                                return state !== 'STARTED' && state !== 'PENDING';
+                                            }, { interval: 1900 });
+                                            const taskState = (await getTask(taskId)).state;
+                                            if (taskState === 'STARTED') {
+                                                setErrorMessage('');
+                                            } else {
+                                                setErrorMessage('Error: Something went bad while creating the instance. Check your limits and try again.');
+                                            }
+                                            setCreating(false);
+                                        } catch (err) {
+                                            // pwaitfor timeouted
+                                            if (err instanceof TimeoutError) {
+                                                setErrorMessage('TimeoutError: Status of the instance is still unknown. Please check dashboad instances table and try again.');
+                                                setCreating(false);
+                                            } else {
+                                                throw err;
+                                            }
+                                        }
+
+
                                     } catch (err) {
-                                        if (err.response.status === 401) {
+                                        if (err?.response?.status === 401) {
                                             console.log("Session expired");
                                             context?.logout();
                                         }
                                         else {
                                             throw err;
                                         }
+                                    } finally {
+                                        // setCreating(false);
                                     }
                                 }
                                 setActiveStep(activeStep + 1);
