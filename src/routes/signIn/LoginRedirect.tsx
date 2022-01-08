@@ -18,5 +18,5 @@ export const LoginRedirect = () => {
 			console.log(e);
 		});
 
-	return <></>;
+	return <div />;
 };

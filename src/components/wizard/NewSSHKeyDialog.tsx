@@ -48,7 +48,6 @@ export const NewSSHKeyDialog = ({ uploadKey }: NewSSHKeyDialogProps) => {
 						guide.
 					</DialogContentText>
 					<NormalTextField
-						autoFocus
 						value={keyName}
 						required
 						margin="dense"

@@ -23,7 +23,7 @@ import { FloatingIPData } from '../../models/FloatingIPData';
 const useStyles = makeStyles({
 	table: {
 		minWidth: 650
-	}, 
+	},
 	tableRow: {
 		'& > *': {
 			fontSize: '1rem'
@@ -56,11 +56,11 @@ export const InstancesTable = ({
 				return;
 			}
 			const responses = await Promise.all(
-				instances!.map(instance => getInstructions(instance))
+				instances?.map(instance => getInstructions(instance))
 			);
 			for (let i = 0; i < responses.length; i++) {
 				instructions.set(
-					instances![i].id,
+					instances?.[i].id,
 					responses[i] || { floating_ip: null, instructions: null }
 				);
 			}
@@ -104,7 +104,7 @@ export const InstancesTable = ({
 									) : (
 										<FloatingIpDialog
 											setLoading={setLoading}
-											floatingIPs={floatingIps || []}
+											floatingIPs={floatingIps ?? []}
 											instanceId={instance.id}
 											reloadData={reloadData}
 										/>

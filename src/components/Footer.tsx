@@ -12,6 +12,7 @@ export const Logos = () => {
 			<Grid container spacing={5}>
 				{IMAGES.map(img => (
 					<Grid
+						key={img}
 						item
 						xs={12}
 						sm={6}

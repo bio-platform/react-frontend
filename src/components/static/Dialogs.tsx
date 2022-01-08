@@ -19,34 +19,47 @@ import { FloatingIPData } from '../../models/FloatingIPData';
 import { Instructions } from '../../models/Instructions';
 
 type ConfirmationDialogProps = {
-	open: boolean; 
+	open: boolean;
 	handleClose: () => void;
 	title: string;
 	description: string;
 	handleConfirm: () => void;
 };
 
-export const ConfirmationDialog = (props: ConfirmationDialogProps) => (<Dialog
-        open={props.open}
-        onClose={props.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-    >
-        <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
-        <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-                {props.description}
-            </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-            <Button onClick={() => { props.handleClose(); }} color="primary">
-                Cancel
-            </Button>
-            <Button onClick={() => { props.handleConfirm(); props.handleClose(); }} color="primary" autoFocus>
-                Confirm
-            </Button>
-        </DialogActions>
-    </Dialog>);
+export const ConfirmationDialog = (props: ConfirmationDialogProps) => (
+	<Dialog
+		open={props.open}
+		onClose={props.handleClose}
+		aria-labelledby="alert-dialog-title"
+		aria-describedby="alert-dialog-description"
+	>
+		<DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
+		<DialogContent>
+			<DialogContentText id="alert-dialog-description">
+				{props.description}
+			</DialogContentText>
+		</DialogContent>
+		<DialogActions>
+			<Button
+				onClick={() => {
+					props.handleClose();
+				}}
+				color="primary"
+			>
+				Cancel
+			</Button>
+			<Button
+				onClick={() => {
+					props.handleConfirm();
+					props.handleClose();
+				}}
+				color="primary"
+			>
+				Confirm
+			</Button>
+		</DialogActions>
+	</Dialog>
+);
 
 type InfoDialogProps = {
 	instruction: Instructions | undefined;
@@ -151,10 +164,18 @@ export const FloatingIpDialog = ({
 									setSelectedIp(event.target.value as string);
 								}}
 								fullWidth
-							> 
+							>
 								{floatingIPs !== [] ? (
-									floatingIPs.map(value => <option key={value.name} value={value.name}>{value.name}</option>)) 
-                                    : <option key="" value="">You don't have any floating ip to add</option>}
+									floatingIPs.map(value => (
+										<option key={value.name} value={value.name}>
+											{value.name}
+										</option>
+									))
+								) : (
+									<option key="" value="">
+										You do not have any floating ip to add
+									</option>
+								)}
 							</Select>
 						</FormControl>
 					</DialogContentText>
@@ -180,7 +201,6 @@ export const FloatingIpDialog = ({
 							reloadData();
 						}}
 						color="primary"
-						autoFocus
 					>
 						Confirm
 					</Button>

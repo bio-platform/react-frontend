@@ -33,7 +33,6 @@ export const NormalTextField = (props: Props) => {
 	return (
 		<TextField
 			label={props.label}
-			autoFocus={props.autoFocus}
 			margin={props.margin}
 			required={props.required}
 			onChange={handleValueChange}

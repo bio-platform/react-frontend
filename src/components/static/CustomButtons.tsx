@@ -39,8 +39,8 @@ export const DeleteInstanceButton = (props: DeleteInstanceButtonProps) => {
 							props.instance.metadata.name
 						) {
 							await deleteInstanceV2(
-								props.instance.metadata.workspace_id!,
-								props.instance.metadata.name!
+								props.instance.metadata.workspace_id,
+								props.instance.metadata.name
 							);
 						} else {
 							await deleteInstance(props.instance);

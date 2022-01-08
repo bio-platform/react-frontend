@@ -10,7 +10,7 @@ export type LoadingPageProps = {
 export const LoadingPage = ({ size }: LoadingPageProps) => (
 	<Box mt={3} mb={3}>
 		<CenterStack>
-			<CircularProgress size={size || 100} />
+			<CircularProgress size={size ?? 100} />
 		</CenterStack>
 	</Box>
 );

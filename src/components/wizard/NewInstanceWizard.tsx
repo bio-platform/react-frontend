@@ -74,7 +74,7 @@ export const NewInstanceWizard = ({
 	useEffect(() => {
 		if (configuration) {
 			// set default values for options and ssh keys
-			configuration.options!.forEach(option => {
+			configuration.options?.forEach(option => {
 				instanceData.set(option.name, option.default);
 				setInstanceData(new Map(instanceData));
 			});
@@ -195,7 +195,7 @@ export const NewInstanceWizard = ({
 												required
 												id={textVal}
 												label={capitalize(textVal.replace('_', ' '))}
-												value={instanceData.get(textVal) || ''}
+												value={instanceData.get(textVal) ?? ''}
 												onChange={text => {
 													instanceData.set(textVal, text);
 													setInstanceData(new Map(instanceData));
@@ -214,7 +214,7 @@ export const NewInstanceWizard = ({
 												required
 												id={numVal}
 												label={capitalize(numVal.replace('_', ' '))}
-												value={instanceData.get(numVal) || 0}
+												value={instanceData.get(numVal) ?? 0}
 												onChange={val => {
 													instanceData.set(numVal, +val);
 													setInstanceData(new Map(instanceData));
@@ -244,7 +244,7 @@ export const NewInstanceWizard = ({
 											{capitalize(option.name.replace('_', ' '))}
 										</InputLabel>
 										<Select
-											value={instanceData.get(option.name) || option.default}
+											value={instanceData.get(option.name) ?? option.default}
 											onChange={event => {
 												instanceData.set(
 													option.name,
@@ -285,7 +285,7 @@ export const NewInstanceWizard = ({
 									setDefaultNetwork={setDefaultNetwork}
 									setSelectedNetwork={setSelectedNetwork}
 									selectedNetwork={
-										instanceData.get('local_network_id') || undefined
+										instanceData.get('local_network_id') ?? undefined
 									}
 								/>
 							</Box>
@@ -294,7 +294,7 @@ export const NewInstanceWizard = ({
 									setDefaultFloatingIP={setDefaultFloatingIP}
 									setSelectedFloatingIP={setSelectedFloatingIP}
 									selectedFloatingIP={
-										instanceData.get('floating_ip') || undefined
+										instanceData.get('floating_ip') ?? undefined
 									}
 								/>
 							</Box>
@@ -302,7 +302,7 @@ export const NewInstanceWizard = ({
 								<SSHKeySelector
 									setDefaultKey={setDefaultKey}
 									setSelectedKey={setSelectedKey}
-									selectedKey={instanceData.get('ssh') || undefined}
+									selectedKey={instanceData.get('ssh') ?? undefined}
 								/>
 							</Box>
 						</Box>

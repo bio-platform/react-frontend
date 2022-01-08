@@ -89,7 +89,10 @@ export const ConfigurationTabs = ({
 		setTags(parsedTags);
 	}, [configurations]);
 
-	const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+	const handleChange = (
+		_event: React.ChangeEvent<unknown>,
+		newValue: number
+	) => {
 		setValue(newValue);
 	};
 

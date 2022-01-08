@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select } from '@material-ui/core';
+import { FormControl, InputLabel, Select, Typography } from '@material-ui/core';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import { getNetworks } from '../../api/UserApi';
@@ -46,21 +46,25 @@ export const LocalNetworkIdSelector = ({
 		return <LoadingPage size={20} />;
 	}
 
+	if (networks === undefined) {
+		return <Typography>No networks available.</Typography>;
+	}
+
 	return (
-		<>
-			{networks!.length > 0 && (
+		<div>
+			{networks?.length > 0 && (
 				<FormControl fullWidth>
 					<InputLabel htmlFor="network">Network</InputLabel>
 					<Select
 						fullWidth
-						value={selectedNetwork || networks![0].id}
+						value={selectedNetwork ?? networks?.[0].id}
 						onChange={setSelectedNetwork}
 						inputProps={{
 							name: 'network',
 							id: 'network'
 						}}
 					>
-						{networks!.map((network: Network) => (
+						{networks?.map((network: Network) => (
 							<option key={network.id} value={network.id}>
 								{network.name}
 							</option>
@@ -68,6 +72,6 @@ export const LocalNetworkIdSelector = ({
 					</Select>
 				</FormControl>
 			)}
-		</>
+		</div>
 	);
 };

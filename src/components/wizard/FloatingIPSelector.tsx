@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, Select } from '@material-ui/core';
+import { FormControl, InputLabel, Select, Typography } from '@material-ui/core';
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 
 import { getFloatingIps } from '../../api/InstanceApi';
@@ -31,7 +31,9 @@ export const FloatingIPSelector = ({
 			(async () => {
 				const response = await getFloatingIps();
 				if (response.length === 0) {
-					alert("Cannot load available floating IP. Plese contact administrator.")
+					alert(
+						'Cannot load available floating IP. Plese contact administrator.'
+					);
 					return;
 				}
 				setFloatingIPs(response);
@@ -52,21 +54,25 @@ export const FloatingIPSelector = ({
 		return <LoadingPage size={20} />;
 	}
 
+	if (floatingIPs === undefined) {
+		return <Typography>No floating IPs</Typography>;
+	}
+
 	return (
-		<>
-			{floatingIPs!.length > 0 && (
+		<div>
+			{floatingIPs?.length > 0 && (
 				<FormControl fullWidth>
 					<InputLabel htmlFor="floating-ip">Floating IP</InputLabel>
 					<Select
 						fullWidth
-						value={selectedFloatingIP || floatingIPs![0].name}
+						value={selectedFloatingIP ?? floatingIPs?.[0].name}
 						onChange={setSelectedFloatingIP}
 						inputProps={{
 							name: 'floating-ip',
 							id: 'floating-ip'
 						}}
 					>
-						{floatingIPs!.map((floatingIP: FloatingIPData) => (
+						{floatingIPs?.map((floatingIP: FloatingIPData) => (
 							<option key={floatingIP.name} value={floatingIP.name}>
 								{floatingIP.name}
 							</option>
@@ -74,6 +80,6 @@ export const FloatingIPSelector = ({
 					</Select>
 				</FormControl>
 			)}
-		</>
+		</div>
 	);
 };

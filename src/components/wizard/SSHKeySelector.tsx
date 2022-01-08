@@ -82,7 +82,7 @@ export const SSHKeySelector = ({
 						<InputLabel htmlFor="ssh-key">SSH Key</InputLabel>
 						<Select
 							fullWidth
-							value={selectedKey || keyPairs![0].name}
+							value={selectedKey ?? keyPairs![0].name}
 							onChange={setSelectedKey}
 							inputProps={{
 								name: 'ssh-key',
@@ -97,7 +97,7 @@ export const SSHKeySelector = ({
 						</Select>
 					</FormControl>
 				) : (
-					<Typography>You don't have any ssh keys. Upload new one.</Typography>
+					<Typography>You do not have any ssh keys. Upload new one.</Typography>
 				)}
 			</Box>
 			<Box mt={2}>
