@@ -26,7 +26,10 @@ yarn-error.log*
 
 .vs
 .idea
-.env
 .vscode
 
 .eslintcache
+
+*.zip
+
+package-lock.json

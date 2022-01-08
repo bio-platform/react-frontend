@@ -1,49 +1,61 @@
-import React from "react"
-import { Grid, useTheme } from "@material-ui/core"
-import { VictoryPie } from "victory"
-import { HeaderPaper } from "../HeaderPaper"
+import React from 'react';
+import { Grid, Typography, useTheme } from '@material-ui/core';
+import { VictoryPie } from 'victory';
 
-export const Limits = () => {
-    const theme = useTheme();
+import { HeaderPaper } from '../HeaderPaper';
+import { Limit } from '../../models/Limit';
 
-    return (
-        <Grid container spacing={3}>
-            <Grid sm={6} md={4} lg={3} item={true}>
-                <HeaderPaper title="Floating IPs x/y">
-                    <VictoryPie
-                        colorScale={[theme.palette.error.main, theme.palette.success.main]}
-                        data={[{ x: "Used", y: 60 }, { x: "Available", y: 40 }]}
-                        style={{ labels: { fontSize: 20, fill: "white" } }}
-                        labelRadius={50} />
-                </HeaderPaper>
-            </Grid>
-            <Grid sm={6} md={4} lg={3} item={true}>
-                <HeaderPaper title="Instances x/y">
-                    <VictoryPie
-                        colorScale={[theme.palette.error.main, theme.palette.success.main]}
-                        data={[{ x: "Used", y: 60 }, { x: "Available", y: 40 }]}
-                        style={{ labels: { fontSize: 20, fill: "white" } }}
-                        labelRadius={50} />
-                </HeaderPaper>
-            </Grid>
-            <Grid sm={6} md={4} lg={3} item={true}>
-                <HeaderPaper title="Cores x/y">
-                    <VictoryPie
-                        colorScale={[theme.palette.error.main, theme.palette.success.main]}
-                        data={[{ x: "Used", y: 60 }, { x: "Available", y: 40 }]}
-                        style={{ labels: { fontSize: 20, fill: "white" } }}
-                        labelRadius={50} />
-                </HeaderPaper>
-            </Grid>
-            <Grid sm={6} md={4} lg={3} item={true}>
-                <HeaderPaper title="RAM x/y GB">
-                    <VictoryPie
-                        colorScale={[theme.palette.error.main, theme.palette.success.main]}
-                        data={[{ x: "Used", y: 60 }, { x: "Available", y: 40 }]}
-                        style={{ labels: { fontSize: 20, fill: "white" } }}
-                        labelRadius={50} />
-                </HeaderPaper>
-            </Grid>
-        </Grid>
-    )
-}
+type Props = {
+	limit: Limit | undefined;
+};
+
+export const Limits = ({ limit }: Props) => {
+	const theme = useTheme();
+
+	if (limit === undefined) {
+		return <Typography>Cannot load limits</Typography>;
+	}
+
+	// helper for cleaner code
+	const limitArray = [
+		{
+			name: 'Floating IPs ',
+			used: limit.floating_ips.used,
+			limit: limit.floating_ips.limit
+		},
+		{
+			name: 'Instances ',
+			used: limit.instances.used,
+			limit: limit.instances.limit
+		},
+		{ name: 'Cores ', used: limit.cores.used, limit: limit.cores.limit },
+		{ name: 'RAM ', used: limit.ram.used, limit: limit.ram.limit }
+	];
+
+	return (
+		<Grid container spacing={3}>
+			{limitArray.map(element => (
+				<Grid key={element.name} sm={6} md={4} lg={3} item>
+					<HeaderPaper
+						title={`${element.name + element.used}/${element.limit}${
+							element.name === 'RAM ' ? ' MB' : ''
+						}`}
+					>
+						<VictoryPie
+							colorScale={[
+								theme.palette.error.main,
+								theme.palette.success.main
+							]}
+							data={[
+								{ x: 'Used', y: element.used },
+								{ x: 'Available', y: element.limit - element.used }
+							]}
+							style={{ labels: { fontSize: 20, fill: 'white' } }}
+							labelRadius={50}
+						/>
+					</HeaderPaper>
+				</Grid>
+			))}
+		</Grid>
+	);
+};
