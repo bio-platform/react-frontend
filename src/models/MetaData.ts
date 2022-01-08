@@ -1,4 +1,4 @@
-export interface MetaData {
-        Bioclass_user: string;
-        Bioclass_email: string;
-}
+export type MetaData = {
+	Bioclass_user: string;
+	Bioclass_email: string;
+};

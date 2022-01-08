@@ -1,4 +1,4 @@
-export interface Instructions {
-    instructions: null | string;
-    floating_ip: null | string;
-}
+export type Instructions = {
+	instructions: null | string;
+	floating_ip: null | string;
+};

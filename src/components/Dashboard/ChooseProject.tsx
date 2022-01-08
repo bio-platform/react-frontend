@@ -1,17 +1,19 @@
-import React, { useContext, useEffect, useState } from "react"
-import { Container, Typography, Box, Button } from "@material-ui/core"
-import { getProjects, putProject } from "../../api/UserApi";
-import { Project } from "../../models/Project";
-import { LoadingPage } from "../static/LoadingPage";
-import { Select } from "@material-ui/core";
-import { AuthContextType, AuthContext } from "../../routes/AuthProvider";
-import { CenterStack } from "../static/Positioning";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useEffect, useState } from 'react';
+import { Container, Typography, Box, Button, Select } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+
+import { getProjects, putProject } from '../../api/UserApi';
+import { Project } from '../../models/Project';
+import { LoadingPage } from '../static/LoadingPage';
+import { AuthContextType, AuthContext } from '../../routes/AuthProvider';
+import { CenterStack } from '../static/Positioning';
 
 export const ChooseProject = () => {
-    const [projects, setProjects] = useState<Project[]>([])
+    const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedProject, setSelectedProject] = useState<Project | undefined>(undefined);
+    const [selectedProject, setSelectedProject] = useState<Project | undefined>(
+        undefined
+    );
 
     const context = useContext<AuthContextType>(AuthContext);
     const history = useHistory();
@@ -28,39 +30,44 @@ export const ChooseProject = () => {
                 })();
             } catch (err) {
                 if (err.response.status === 401) {
-                    console.log("Session expired");
+                    console.log('Session expired');
                     context?.logout();
-                }
-                else {
+                } else {
                     throw err;
                 }
             }
         }
-    }, [context, history])
+    }, [context, history]);
 
     if (loading) {
-        return (<Container maxWidth='xl'><LoadingPage /></Container>)
+        return (
+            <Container maxWidth="xl">
+                <LoadingPage />
+            </Container>
+        );
     }
 
-
-
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSelectedProject(projects.find(element => element.id === event.target.value as string));
+        setSelectedProject(
+            projects.find(element => element.id === (event.target.value as string))
+        );
     };
 
     const makeOptions = () => {
-        const options = projects.map((project) => {
-            return <option key={project.id} value={project.id}>{project.name}</option>
-        })
+        const options = projects.map(project => (
+            <option key={project.id} value={project.id}>
+                {project.name}
+            </option>
+        ));
         return options;
-    }
+    };
 
     return (
-        <Container maxWidth='xl' >
+        <Container maxWidth="xl">
             <Box mt={2} mb={3}>
                 <CenterStack>
                     <Box>
-                        <Typography variant='h2'> Choose project </Typography>
+                        <Typography variant="h2"> Choose project </Typography>
                     </Box>
                     <Box mt={2} mb={3}>
                         <Select
@@ -69,11 +76,13 @@ export const ChooseProject = () => {
                             onChange={handleChange}
                             inputProps={{
                                 name: 'project',
-                                id: 'select-project',
+                                id: 'select-project'
                             }}
                             displayEmpty
                         >
-                            <option key="undefined" value='' disabled>Choose project</option>
+                            <option key="undefined" value="" disabled>
+                                Choose project
+                            </option>
                             {makeOptions()}
                         </Select>
                     </Box>
@@ -90,21 +99,20 @@ export const ChooseProject = () => {
                                     history.push('/dashboard/overview');
                                 } catch (err) {
                                     if (err.response.status === 401) {
-                                        console.log("Session expired");
+                                        console.log('Session expired');
                                         context?.logout();
-                                    }
-                                    else {
+                                    } else {
                                         throw err;
                                     }
+
                                 }
                             }}
                         >
-
                             Select
-                    </Button>
+                        </Button>
                     </Box>
                 </CenterStack>
             </Box>
         </Container>
-    )
-}
+    );
+};

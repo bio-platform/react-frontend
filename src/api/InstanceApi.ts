@@ -1,6 +1,5 @@
 import { FloatingIPData } from './../models/FloatingIPData';
 import { ConfigurationData } from './../models/ConfigurationData';
-import { FloatingIP } from './../models/FloatingIP';
 import { Instance } from './../models/Instance';
 import axios from "axios";
 import { API_URL } from "../constants/Environment";

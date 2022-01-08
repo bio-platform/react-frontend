@@ -1,5 +1,5 @@
-export interface User {
-    token: string;  
-    name: string;
-    email: string;
-}
+export type User = {
+	token: string;
+	name: string;
+	email: string;
+};

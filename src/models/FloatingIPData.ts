@@ -1,3 +1,3 @@
-export interface FloatingIPData {
-    name : string;
-}
+export type FloatingIPData = {
+	name: string;
+};

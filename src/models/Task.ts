@@ -1,7 +1,7 @@
-export interface Task {
-    state: string;
-    reason?: {
-        code?: number;
-        message?: string;
-    };
-}
+export type Task = {
+	state: string;
+	reason?: {
+		code?: number;
+		message?: string;
+	};
+};

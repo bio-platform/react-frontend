@@ -1,4 +1,4 @@
-export interface FloatingIP {
-    instance_id: string;
-    network_id: string;
-}
+export type FloatingIP = {
+	instance_id: string;
+	network_id: string;
+};

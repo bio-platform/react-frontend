@@ -4,4 +4,3 @@ export const OIDC_REDIRECT_URI = 'http://localhost:4200/callback/';
 export const OIDC_POST_LOGOUT_REDIRECT_URI = 'http://localhost:4200/auth/';
 
 export const API_URL = 'https://ip-147-251-124-112.flt.cloud.muni.cz/api/';
-

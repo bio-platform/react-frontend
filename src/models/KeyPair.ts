@@ -1,4 +1,4 @@
-export interface KeyPair {
-    name: string;
-    public_key: string;
-}
+export type KeyPair = {
+	name: string;
+	public_key: string;
+};

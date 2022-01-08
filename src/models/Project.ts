@@ -1,8 +1,8 @@
-export interface ProjectList {
-    projects:Project[];
-}
+export type ProjectList = {
+	projects: Project[];
+};
 
-export interface Project{
-    id:string;
-    name:string;
-}
+export type Project = {
+	id: string;
+	name: string;
+};
