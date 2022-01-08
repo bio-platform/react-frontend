@@ -30,6 +30,10 @@ export const FloatingIPSelector = ({
 		try {
 			(async () => {
 				const response = await getFloatingIps();
+				if (response.length === 0) {
+					alert("Cannot load available floating IP. Plese contact administrator.")
+					return;
+				}
 				setFloatingIPs(response);
 				setDefaultFloatingIP(response[0].name);
 				setLoading(false);
