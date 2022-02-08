@@ -22,6 +22,7 @@ import { getTask, postInstance } from '../../api/InstanceApi';
 import { ConfigurationData } from '../../models/ConfigurationData';
 import { AuthContextType, AuthContext } from '../../routes/AuthProvider';
 import { NormalTextField } from '../NormalTextField';
+import { LoadingPage } from '../static/LoadingPage';
 import { CenterStack } from '../static/Positioning';
 import { WrongPath } from '../static/WrongPath';
 
@@ -271,7 +272,26 @@ export const NewInstanceWizard = ({
 					</CenterStack>
 				);
 			case 2:
-				return (
+				return creating ? (
+					<CenterStack>
+						<Box
+							mt={3}
+							mb={3}
+							width={1}
+							maxWidth={500}
+							className={classes.step}
+						>
+							<LoadingPage size={100} />
+							<Typography>
+								Selected instance is being built. It can take some time. You can
+								wait for the result or go to Dashboard and see status there.
+							</Typography>
+							<Button href="/dashboard" variant="outlined">
+								Go to Dashboard
+							</Button>
+						</Box>
+					</CenterStack>
+				) : (
 					<CenterStack>
 						<Box
 							mt={3}
@@ -322,12 +342,12 @@ export const NewInstanceWizard = ({
 							{errorMessage === '' ? (
 								<>
 									<div>
-										<Typography variant="h4">Building.</Typography>
+										<Typography variant="h4">Success.</Typography>
 									</div>
 									<div>
 										<Typography>
-											Your instance is being created. Information about progress
-											is on the dashboard.
+											Your instance is created. You can go to dashboard to see
+											further instructions.
 										</Typography>
 									</div>
 									<div>
@@ -416,7 +436,7 @@ export const NewInstanceWizard = ({
 												{ interval: 1900 }
 											);
 											const taskState = (await getTask(taskId)).state;
-											if (taskState === 'STARTED') {
+											if (taskState === 'SUCCESS') {
 												setErrorMessage('');
 											} else {
 												setErrorMessage(
