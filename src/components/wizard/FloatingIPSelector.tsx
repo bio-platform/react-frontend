@@ -31,9 +31,8 @@ export const FloatingIPSelector = ({
 			(async () => {
 				const response = await getFloatingIps();
 				if (response.length === 0) {
-					alert(
-						'Cannot load available floating IP. Plese contact administrator.'
-					);
+					setFloatingIPs(undefined);
+					setLoading(false);
 					return;
 				}
 				setFloatingIPs(response);
@@ -54,8 +53,13 @@ export const FloatingIPSelector = ({
 		return <LoadingPage size={20} />;
 	}
 
-	if (floatingIPs === undefined) {
-		return <Typography>No floating IPs</Typography>;
+	if (!floatingIPs) {
+		// floating ips are not defined it needs to be allocated\
+		return (
+			<div>
+				<Typography>Floating IP will be created automatically.</Typography>
+			</div>
+		);
 	}
 
 	return (

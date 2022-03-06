@@ -163,11 +163,7 @@ export const NewInstanceWizard = ({
 				}
 				return true;
 			case 2:
-				return (
-					instanceData.has('ssh') &&
-					instanceData.has('floating_ip') &&
-					instanceData.has('local_network_id')
-				);
+				return instanceData.has('ssh') && instanceData.has('local_network_id');
 
 			default:
 				return false;
